@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="icon" type="image/png" href="../assets/images/favicon.png">
   <title>Dashboard</title>
 
@@ -57,7 +57,30 @@
         </div>
       </div>
     </div>
+    <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-controls="navDrawer" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
+
+  <div class="nav-drawer-overlay" id="navDrawerOverlay"></div>
+  <aside class="nav-drawer" id="navDrawer" aria-label="Navigation menu" aria-hidden="true">
+    <div class="drawer-head">
+      <img src="../assets/images/favicon.png" alt="" width="32" height="32">
+      <span class="drawer-brand">ATLAS PSU</span>
+    </div>
+    <nav class="drawer-list">
+      <button type="button" class="drawer-item" data-go="0">Dashboard</button>
+      <button type="button" class="drawer-item" data-go="1">Workload Optimization</button>
+      <button type="button" class="drawer-item" data-go="2">Reports</button>
+      <button type="button" class="drawer-item" data-go="3">Faculty &amp; Subjects</button>
+      <button type="button" class="drawer-item" data-go="4">Settings</button>
+    </nav>
+    <div class="drawer-foot">
+      <div class="drawer-user">
+        <img src="https://media.istockphoto.com/id/2171382633/vector/user-profile-icon-anonymous-person-symbol-blank-avatar-graphic-vector-illustration.jpg?s=612x612&w=0&k=20&c=ZwOF6NfOR0zhYC44xOX06ryIPAUhDvAajrPsaZ6v1-w=" class="profile-pic" alt="User profile">
+        <span id="drawerUserLabel">Profile</span>
+      </div>
+      <a href="login.html" class="drawer-logout" onclick="sessionStorage.clear()">Logout</a>
+    </div>
+  </aside>
 
   <!-- ========================================================
        PANELS WRAPPER
@@ -702,5 +725,24 @@
   <div id="toastNotif" class="toast-notif" aria-live="polite"></div>
 
 
+<script>
+(function(){
+  var btn=document.getElementById('navHamburger'),dr=document.getElementById('navDrawer'),ov=document.getElementById('navDrawerOverlay');
+  if(!btn||!dr||!ov)return;
+  var items=dr.querySelectorAll('[data-go]');
+  var deptMap={IT:'IT Dept',CS:'CS Dept',MB:'Marine Bio',ES:'Env. Science',MedB:'Med Biology'};
+  var u=sessionStorage.getItem('atlasUser'),d=sessionStorage.getItem('atlasDept'),l=document.getElementById('drawerUserLabel');
+  if(l&&u)l.textContent=u+(d?' \u00b7 '+(deptMap[d]||d):'');
+  function sync(){var ps=Array.prototype.slice.call(document.querySelectorAll('.panel'));var i=ps.findIndex(function(p){return p.classList.contains('active');});items.forEach(function(it){it.classList.toggle('active',+it.dataset.go===i);});}
+  function set(o){dr.classList.toggle('open',o);ov.classList.toggle('open',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu');dr.setAttribute('aria-hidden',!o);if(o)sync();}
+  btn.addEventListener('click',function(){set(!dr.classList.contains('open'));});
+  ov.addEventListener('click',function(){set(false);});
+  items.forEach(function(it){it.addEventListener('click',function(){window.switchPanel(+it.dataset.go);set(false);setTimeout(sync,60);});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});
+  window.addEventListener('resize',function(){if(window.innerWidth>900)set(false);});
+  document.querySelectorAll('.nav-item[data-panel]').forEach(function(n){n.addEventListener('click',function(){setTimeout(sync,60);});});
+  sync();
+})();
+</script>
 </body>
 </html>
