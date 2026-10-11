@@ -27,17 +27,12 @@ const DAY_MAP = {
 
 const DAY_ORDER = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5 };
 
-const DAY_COLORS = {
-  Mon: 'Mon', Tue: 'Tue', Wed: 'Wed',
-  Thu: 'Thu', Fri: 'Fri', Sat: 'Sat'
-};
-
 // MAX_UNITS is now dynamic — read from Settings (localStorage), default 24
 function getMaxUnits() {
   try {
     const s = JSON.parse(localStorage.getItem('systemSettings') || '{}');
     return parseInt(s.max_units) || 24;
-  } catch(e) { return 24; }
+  } catch { return 24; }
 }
 // Keep a live reference updated on each access
 Object.defineProperty(window, 'MAX_UNITS', { get: getMaxUnits });
@@ -47,7 +42,7 @@ function getUnitsPerAssignment() {
   try {
     const s = JSON.parse(localStorage.getItem('systemSettings') || '{}');
     return parseInt(s.units_per_assignment) || 2;
-  } catch(e) { return 2; }
+  } catch { return 2; }
 }
 
 // Per-faculty max_units lookup (falls back to global Standard Max Units)
@@ -75,20 +70,6 @@ const SPECIALIZATIONS = [
   'Elective'
 ];
 
-const SUBJECT_TYPES = [
-  'Core Theory',
-  'Programming',
-  'Systems',
-  'Data Management',
-  'Networks & Security',
-  'Applied Computing',
-  'Mathematics',
-  'Web & App Dev',
-  'Research & Capstone',
-  'Industry Practice',
-  'Elective'
-];
-
 const LECTURE_ROOMS = [
   'CL1','CL2','CL3',
   'IT Room 1','IT Room 2','IT Room 3',
@@ -97,8 +78,6 @@ const LECTURE_ROOMS = [
 ];
 
 const LABORATORY_ROOMS = ['MTC1','MTC2','IT101','NIT1','NIT3'];
-
-const ALL_ROOMS = [...LECTURE_ROOMS, ...LABORATORY_ROOMS];
 
 // Room capacity defaults — mirrors backend config/settings.py ROOM_CAPACITY
 const DEFAULT_ROOM_CAPACITY = {
@@ -348,8 +327,6 @@ function initCharts() {
 /* ============================================================
    3. PANEL NAVIGATION
    ============================================================ */
-let currentPanel = 0;
-
 function initNavigation() {
   const panels   = document.querySelectorAll('.panel');
   const navItems = document.querySelectorAll('.nav-item[data-panel]');
@@ -378,7 +355,6 @@ function switchPanel(index) {
 
   panels.forEach((p, i) => p.classList.toggle('active', i === index));
   navItems.forEach((item, i) => item.classList.toggle('active', i === index));
-  currentPanel = index;
 
   // Resize charts after panel is visible
   setTimeout(() => {
@@ -498,18 +474,6 @@ function renderCapacityMetrics(capacityMetrics) {
   document.getElementById('capMetricWarnPct').textContent = pct(warnCt);
   document.getElementById('capMetricHard').textContent    = hardCt;
   document.getElementById('capMetricHardPct').textContent = pct(hardCt);
-
-  // Populate persistent dashboard capacity stat row
-  const dashRow = document.getElementById('dashCapStatsRow');
-  if (dashRow) {
-    const setD = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    setD('dashCapOk',      okCnt);
-    setD('dashCapOkPct',   pct(okCnt) + ' compliant');
-    setD('dashCapWarn',    warnCt);
-    setD('dashCapWarnPct', pct(warnCt) + ' of assignments');
-    setD('dashCapHard',    hardCt);
-    setD('dashCapHardPct', hardCt > 0 ? pct(hardCt) + ' of assignments' : 'none detected');
-  }
 
   // Overall status badge
   const badge = document.getElementById('capacityOverallBadge');
@@ -1036,11 +1000,6 @@ function initRunGA() {
   if (!runBtn) return;
 
   runBtn.addEventListener('click', async () => {
-    const popSize = document.getElementById('populationSize').value;
-    const generations= document.getElementById('numGenerations').value;
-    const mutRate = document.getElementById('mutationRate').value;
-    const crossover = document.getElementById('crossoverRate').value;
-
     loading.classList.remove('hidden');
     tableWrapper.classList.add('hidden');
     runBtn.disabled = true;
@@ -1105,7 +1064,7 @@ function initRunGA() {
               status.warnings.forEach(w => console.warn('[ATLAS]', w));
             }
 
-            try { localStorage.setItem('lastGAResult', JSON.stringify(lastGAResult)); } catch(e) {}
+            try { localStorage.setItem('lastGAResult', JSON.stringify(lastGAResult)); } catch { /* ignore */ }
             const metricsSuffix = status.metrics && status.metrics.solve_time_sec
               ? ` (CP-SAT: ${status.metrics.solve_time_sec}s, GA: ${status.metrics.ga_time_sec || 0}s)`
               : '';
@@ -1310,7 +1269,7 @@ function loadFacultyFromStorage() {
   try {
     const data = localStorage.getItem('facultyData');
     return data ? JSON.parse(data) : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -1490,7 +1449,7 @@ function initEditFacultyModal() {
         });
 
         // Re-render all panels
-        try { localStorage.setItem('lastGAResult', JSON.stringify(lastGAResult)); } catch(e) {}
+        try { localStorage.setItem('lastGAResult', JSON.stringify(lastGAResult)); } catch { /* ignore */ }
         const displayResult = filterResultBySemester(lastGAResult);
         renderTable(displayResult);
         updateCharts(displayResult);
@@ -1639,7 +1598,7 @@ function loadSubjectsFromStorage() {
   try {
     const data = localStorage.getItem('subjectsData');
     return data ? JSON.parse(data) : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -2370,7 +2329,7 @@ window.addEventListener('DOMContentLoaded', () => {
         updateReportsPanel(displayResult);
       }
     }
-  } catch(e) { lastGAResult = []; }
+  } catch { lastGAResult = []; }
 
   // Restore analytics cache and re-populate capacity panels
   try {
@@ -2382,14 +2341,14 @@ window.addEventListener('DOMContentLoaded', () => {
       renderCapacityMetrics(resolveCapacityMetrics(analytics));
       renderCapacityAnalytics(analytics);
     }
-  } catch(e) {}
+  } catch { /* ignore */ }
 });
 
 function getActiveSemester() {
   try {
     const mode = JSON.parse(localStorage.getItem('academicMode') || 'null');
     return mode && mode.semester ? mode : null;
-  } catch (e) { return null; }
+  } catch { return null; }
 }
 
 function getActiveSemesterLabel() {
@@ -2401,17 +2360,6 @@ function getActiveSemesterLabel() {
 function updateAllSemesterBadges() {
   const mode = getActiveSemester();
   const label = getActiveSemesterLabel();
-
-  // Navbar badge
-  const navBadge = document.getElementById('navSemesterBadge');
-  if (navBadge) {
-    if (mode) {
-      navBadge.textContent = label;
-      navBadge.style.display = 'flex';
-    } else {
-      navBadge.style.display = 'none';
-    }
-  }
 
   // Panel context badges
   ['dashboardSemContext', 'optimizationSemContext', 'reportsSemContext'].forEach(id => {
@@ -2466,13 +2414,13 @@ function getSystemSettings() {
       units_per_assignment: parseInt(s.units_per_assignment) || 2,
       cp_sat_time_limit:    parseFloat(s.cp_sat_time_limit)  || 60.0,
     };
-  } catch(e) {
+  } catch {
     return { max_units: 24, units_per_assignment: 2, cp_sat_time_limit: 60.0 };
   }
 }
 
 function saveSystemSettings(settings) {
-  try { localStorage.setItem('systemSettings', JSON.stringify(settings)); } catch(e) {}
+  try { localStorage.setItem('systemSettings', JSON.stringify(settings)); } catch { /* ignore */ }
 }
 
 function initSystemSettings() {
@@ -2545,7 +2493,7 @@ function loadClassSizesFromStorage() {
   try {
     const data = localStorage.getItem('classSizesData');
     return data ? JSON.parse(data) : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -2576,7 +2524,7 @@ function loadRoomsFromStorage() {
   try {
     const data = localStorage.getItem('roomsData');
     return data ? JSON.parse(data) : null;
-  } catch (e) { return null; }
+  } catch { return null; }
 }
 
 function saveRoomsToStorage() {
@@ -2700,7 +2648,7 @@ function initRoomManagement() {
           room_capacity: runtimeRoomCapacity
         })
       });
-    } catch (e) { /* backend optional sync */ }
+    } catch { /* backend optional sync */ }
   });
 
   document.getElementById('resetRooms')?.addEventListener('click', () => {
@@ -2773,7 +2721,7 @@ function initClassSizesManagement() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sizes)
       });
-    } catch (e) { /* optional backend sync */ }
+    } catch { /* optional backend sync */ }
   });
 
   document.getElementById('addClassSizeRow')?.addEventListener('click', () => {
@@ -2815,7 +2763,7 @@ function loadSoftConstraintsFromStorage() {
   try {
     const data = localStorage.getItem('softConstraintsData');
     return data ? JSON.parse(data) : {};
-  } catch (e) { return {}; }
+  } catch { return {}; }
 }
 
 function saveSoftConstraintsToStorage(data) {
@@ -2964,7 +2912,7 @@ function initSoftConstraints() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ faculty: name, constraints })
       });
-    } catch (e) { /* optional backend sync */ }
+    } catch { /* optional backend sync */ }
   });
 
   document.getElementById('scClearBtn')?.addEventListener('click', () => {
@@ -3162,35 +3110,6 @@ function showToast(msg, type = 'info') {
 }
 
 window.switchPanel = switchPanel;
-/* ============================================================
-   LOGIN PAGE — login.html inline script (migrated)
-   ============================================================ */
-(function initLoginPage() {
-  const loginBtn = document.getElementById('loginBtn');
-  if (!loginBtn) return; // not on login page
-
-  loginBtn.addEventListener('click', () => {
-    const dept = document.getElementById('department').value;
-    const user = document.getElementById('username').value.trim();
-    const err  = document.getElementById('errorMsg');
-
-    if (!user) {
-      err.textContent = 'Please enter your username.';
-      err.classList.add('show');
-      return;
-    }
-
-    sessionStorage.setItem('atlasDept', dept);
-    sessionStorage.setItem('atlasUser', user);
-    err.classList.remove('show');
-    window.location.href = 'dashboard.html';
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter') loginBtn.click();
-  });
-})();
-
 /* ============================================================
    DASHBOARD PAGE — dashboard.html inline script (migrated)
    ============================================================ */

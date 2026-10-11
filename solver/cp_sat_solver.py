@@ -25,15 +25,15 @@ from typing import Callable, Optional
 
 import config.settings as _cfg_sat
 from config.settings import (
-    TIME_SLOTS, ALL_ROOMS, LABORATORY_ROOMS, LECTURE_ROOMS,
+    TIME_SLOTS, ALL_ROOMS, LABORATORY_ROOMS,
 )
 
 def _upa(): return getattr(_cfg_sat, 'UNITS_PER_ASSIGNMENT', 2)
 def _cstl(): return getattr(_cfg_sat, 'CP_SAT_TIME_LIMIT_SECONDS', 60.0)
 from solver.constraints import (
     faculty_qualifies, faculty_available_at, faculty_load_ok,
-    room_compatible, slot_day,
-    room_exceeds_hard_max, rank_rooms_by_capacity_fit, get_building,
+    room_exceeds_hard_max, get_building,
+    get_room_capacity, room_capacity_score,
 )
 
 # ── Slot helpers ──────────────────────────────────────────────────────────────
@@ -102,7 +102,6 @@ def _assign_room(class_type: str, slot: str, room_slot_used: set,
             else:
                 # All rooms over hard max — assign anyway (lab batch-split use case)
                 # Sort by smallest excess over max so analytics flags correctly
-                from solver.constraints import get_room_capacity
                 candidates = sorted(
                     free_pool,
                     key=lambda r: (
@@ -115,7 +114,6 @@ def _assign_room(class_type: str, slot: str, room_slot_used: set,
 
     # Build composite sort key: capacity fit → building affinity → usage
     def _sort_key(r: str):
-        from solver.constraints import get_room_capacity
         cap = get_room_capacity(r)
         rec = cap.get("recommended", 9999)
         if student_count > 0:
@@ -143,7 +141,6 @@ def _assign_room(class_type: str, slot: str, room_slot_used: set,
 
     # Honor explicit preferred_room if it's free and capacity-comparable
     if preferred_room and preferred_room in candidates and preferred_room != candidates[0]:
-        from solver.constraints import get_room_capacity, room_capacity_score
         pref_score = room_capacity_score(preferred_room, student_count) if student_count > 0 else 0
         best_score = room_capacity_score(candidates[0], student_count) if student_count > 0 else 0
         if pref_score >= best_score - 1.0:
@@ -176,12 +173,9 @@ def _solve_with_ortools(sections: list, faculty_list: list, static_lookup: dict,
         return None
 
     model = cp_model.CpModel()
-    fac_map = {f["name"]: f for f in faculty_list}
     n_slots = len(ALL_SLOT_STRINGS)
 
     # Build eligibility: for each section, list of (fac_idx, slot_idx) pairs
-    fac_names = [f["name"] for f in faculty_list]
-    fac_idx_map = {n: i for i, n in enumerate(fac_names)}
 
     # x[s][f][t] = BoolVar: section s assigned to faculty f at slot t
     x = {}
@@ -376,7 +370,6 @@ def _solve_with_backtracking(sections: list, faculty_list: list, static_lookup: 
                 continue
 
             # Sort by capacity fit → building affinity → usage
-            from solver.constraints import get_room_capacity
             def _sort_key(r: str):
                 cap = get_room_capacity(r)
                 rec = cap.get("recommended", 9999)
@@ -530,13 +523,11 @@ def _repair_unassigned(assignments: list, faculty_list: list, static_lookup: dic
         # Room — capacity-aware, usage-balanced, building-affinity-aware
         class_type = a.get("class_type", "LECTURE")
         student_count = a.get("student_count", 0)
-        day = chosen_slot.split(":")[0].strip() if chosen_slot else ""
         free_rooms = [r for r in _room_pool(class_type) if f"{r}|{chosen_slot}" not in room_slot_used]
         if student_count > 0:
             cap_ok = [r for r in free_rooms if not room_exceeds_hard_max(r, student_count)]
             candidates_r = cap_ok if cap_ok else free_rooms  # lab batch-split fallback
             if candidates_r:
-                from solver.constraints import get_room_capacity
                 def _repair_sort(r):
                     cap = get_room_capacity(r)
                     rec = cap.get("recommended", 9999)

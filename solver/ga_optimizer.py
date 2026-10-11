@@ -18,10 +18,9 @@ import random
 import time
 from typing import Callable, Optional
 
-import config.settings as _cfg_ga
 from solver.constraints import (
-    faculty_available_at, slot_day,
-    room_exceeds_hard_max, rank_rooms_by_capacity_fit, get_building,
+    faculty_available_at,
+    room_exceeds_hard_max, get_building,
     validate_schedule,
 )
 from solver.objective_functions import schedule_fitness

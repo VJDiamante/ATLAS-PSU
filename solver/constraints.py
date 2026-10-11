@@ -10,14 +10,6 @@ import config.settings as _settings
 # Runtime room capacity — overrides ROOM_CAPACITY when set via set_runtime_room_capacity()
 _runtime_room_capacity: dict = {}
 
-# UNITS_PER_ASSIGNMENT is read dynamically from config.settings so route overrides propagate
-def _get_upa():
-    return getattr(_settings, 'UNITS_PER_ASSIGNMENT', 2)
-
-# Module-level alias kept for imports elsewhere; always reads live value
-# UNITS_PER_ASSIGNMENT accessed via _settings.UNITS_PER_ASSIGNMENT below
-
-
 def set_runtime_room_capacity(capacity: dict) -> None:
     """Replace runtime room capacity with values received from the frontend."""
     global _runtime_room_capacity
@@ -170,11 +162,6 @@ def room_capacity_score(room_name: str, student_count: int) -> float:
         return room_capacity_penalty(room_name, student_count)
 
 
-def room_fits_students(room_name: str, student_count: int) -> bool:
-    """True if room can physically accommodate the students (not over hard max)."""
-    return not room_exceeds_hard_max(room_name, student_count)
-
-
 # ── Building helpers ──────────────────────────────────────────────────────────
 
 def get_building(room_name: str) -> str:
@@ -190,30 +177,6 @@ def get_building(room_name: str) -> str:
     if r.startswith("MTC"):      return "MTC"
     if r.startswith("NIT"):      return "NIT"
     return r  # fallback — handles future rooms gracefully
-
-
-def rank_rooms_by_capacity_fit(room_pool: list, student_count: int) -> list:
-    """
-    Sort rooms by best fit for the given student count.
-    Prefers rooms where student_count <= recommended.
-    Among those, prefers tightest fit (smallest recommended >= student_count).
-    Excludes rooms where student_count > max (hard constraint).
-    """
-    if student_count <= 0:
-        return list(room_pool)
-
-    eligible = [r for r in room_pool if not room_exceeds_hard_max(r, student_count)]
-
-    def fit_key(room_name: str):
-        cap = get_room_capacity(room_name)
-        recommended = cap.get("recommended", 9999)
-        max_cap = cap.get("max", 9999)
-        over = max(0, student_count - recommended)
-        # Primary: over_recommended (0 = fits); Secondary: tightest recommended >= student_count
-        gap = recommended - student_count if student_count <= recommended else -recommended
-        return (over, gap)
-
-    return sorted(eligible, key=fit_key)
 
 
 # ── Schedule Validator ────────────────────────────────────────────────────────

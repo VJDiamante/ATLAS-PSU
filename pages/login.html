@@ -120,10 +120,6 @@
 
   <script src="../assets/js/main-script.js" defer></script>
   <script>
-    // This page uses its own button IDs (btnSignIn / btnSignUp) instead of the
-    // "loginBtn" id that main-script.js's built-in initLoginPage() looks for,
-    // so that handler never attaches here and there's no conflict.
-    //
     // On success, this sets the same sessionStorage keys main-script.js's
     // dashboard auth guard and initDashboardPage() already read:
     //   sessionStorage.atlasUser  -> shown in the navbar

@@ -6,9 +6,8 @@ Thread-safe progress store for polling endpoint.
 
 import copy
 import threading
-import time
 
-from config.settings import SPECIALIZATION_MAP, DEFAULT_CLASS_SIZES
+from config.settings import SPECIALIZATION_MAP
 from solver.cp_sat_solver import solve as cp_solve
 from solver.ga_optimizer import optimize as ga_optimize
 from services.analytics_service import compute_analytics

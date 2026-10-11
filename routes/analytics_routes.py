@@ -2,7 +2,7 @@
 ATLAS PSU - routes/analytics_routes.py
 """
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 
 from services.schedule_service import get_progress, get_soft_constraints, get_static_lookup
 from services.analytics_service import compute_analytics

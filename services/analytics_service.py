@@ -6,7 +6,7 @@ Pure computation — no Flask dependencies.
 
 import config.settings as _cfg_ana
 from solver.constraints import (
-    get_required_specs, is_exact_spec_match,
+    is_exact_spec_match,
     get_room_capacity, room_exceeds_hard_max, room_capacity_penalty,
 )
 from solver.objective_functions import compute_satisfaction_metrics

@@ -173,7 +173,6 @@
           </div>
         </div>
 
-
         <!-- Workload chart secondary -->
         <div class="dashboard-chart-card dashboard-chart-secondary">
           <div class="dashboard-card-header">
@@ -201,7 +200,6 @@
         <div class="workload-grid">
           <!-- LEFT: Controls -->
           <div class="workload-controls-card">
-          <!-- Fixed the image source to a direct .gif file link -->
           <img src="https://cdn.dribbble.com/userupload/21115803/file/original-d31905ca435978c16c479e8fc0da3227.gif" class="ga-image" alt="Genetic Algorithm">
           
           <p class="subtitle">Powered by:<br>CP-SAT & Genetic Algorithm</p>
@@ -214,7 +212,6 @@
             ⚙ Advanced Settings
           </button>
         </div>
-
 
           <!-- RIGHT: Result -->
           <div class="workload-result-card">
@@ -732,35 +729,6 @@
   <!-- Toast notification -->
   <div id="toastNotif" class="toast-notif" aria-live="polite"></div>
 
-
-<script>
-(function(){
-  var btn=document.getElementById('navHamburger'),dr=document.getElementById('navDrawer'),ov=document.getElementById('navDrawerOverlay');
-  if(!btn||!dr||!ov)return;
-  var items=dr.querySelectorAll('[data-go]');
-  var deptMap={IT:'IT Dept',CS:'CS Dept',MB:'Marine Bio',ES:'Env. Science',MedB:'Med Biology'};
-  var u=sessionStorage.getItem('atlasUser'),d=sessionStorage.getItem('atlasDept'),l=document.getElementById('drawerUserLabel');
-  if(l&&u)l.textContent=u+(d?' \u00b7 '+(deptMap[d]||d):'');
-  function sync(){var ps=Array.prototype.slice.call(document.querySelectorAll('.panel'));var i=ps.findIndex(function(p){return p.classList.contains('active');});items.forEach(function(it){it.classList.toggle('active',+it.dataset.go===i);});}
-  function set(o){dr.classList.toggle('open',o);ov.classList.toggle('open',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu');dr.setAttribute('aria-hidden',!o);if(o)sync();}
-  btn.addEventListener('click',function(){set(!dr.classList.contains('open'));});
-  ov.addEventListener('click',function(){set(false);});
-  items.forEach(function(it){it.addEventListener('click',function(){window.switchPanel(+it.dataset.go);set(false);setTimeout(sync,60);});});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});
-  window.addEventListener('resize',function(){if(window.innerWidth>900)set(false);});
-  document.querySelectorAll('.nav-item[data-panel]').forEach(function(n){n.addEventListener('click',function(){setTimeout(sync,60);});});
-  sync();
-})();
-</script>
-<script>
-(function(){
-  var m={IT:'Information Technology',CS:'Computer Science',MB:'Marine Biology',ES:'Environmental Science',MedB:'Medical Biology'};
-  var d=sessionStorage.getItem('atlasDept'),b=document.getElementById('deptBanner'),n=document.getElementById('deptBannerName');
-  if(!d||!b||!n)return;
-  n.textContent=(m[d]||d)+' Department';
-  b.style.display='';
-})();
-</script>
 <div class="tt-viewer" id="ttViewer" role="dialog" aria-modal="true" aria-label="Schedule viewer" hidden>
   <div class="tt-viewer-bar">
     <strong>Schedule</strong>
@@ -776,6 +744,31 @@
   <div class="tt-viewer-body" id="ttViewerBody"><div class="tt-sizer" id="ttSizer"><div class="tt-stage" id="ttStage"></div></div></div>
 </div>
 <script>
+(function(){
+  var DEPT_SHORT={IT:'IT Dept',CS:'CS Dept',MB:'Marine Bio',ES:'Env. Science',MedB:'Med Biology'};
+  var DEPT_FULL={IT:'Information Technology',CS:'Computer Science',MB:'Marine Biology',ES:'Environmental Science',MedB:'Medical Biology'};
+(function(){
+  var btn=document.getElementById('navHamburger'),dr=document.getElementById('navDrawer'),ov=document.getElementById('navDrawerOverlay');
+  if(!btn||!dr||!ov)return;
+  var items=dr.querySelectorAll('[data-go]');
+  var u=sessionStorage.getItem('atlasUser'),d=sessionStorage.getItem('atlasDept'),l=document.getElementById('drawerUserLabel');
+  if(l&&u)l.textContent=u+(d?' \u00b7 '+(DEPT_SHORT[d]||d):'');
+  function sync(){var ps=Array.prototype.slice.call(document.querySelectorAll('.panel'));var i=ps.findIndex(function(p){return p.classList.contains('active');});items.forEach(function(it){it.classList.toggle('active',+it.dataset.go===i);});}
+  function set(o){dr.classList.toggle('open',o);ov.classList.toggle('open',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu');dr.setAttribute('aria-hidden',!o);if(o)sync();}
+  btn.addEventListener('click',function(){set(!dr.classList.contains('open'));});
+  ov.addEventListener('click',function(){set(false);});
+  items.forEach(function(it){it.addEventListener('click',function(){window.switchPanel(+it.dataset.go);set(false);setTimeout(sync,60);});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});
+  window.addEventListener('resize',function(){if(window.innerWidth>900)set(false);});
+  document.querySelectorAll('.nav-item[data-panel]').forEach(function(n){n.addEventListener('click',function(){setTimeout(sync,60);});});
+  sync();
+})();
+(function(){
+  var d=sessionStorage.getItem('atlasDept'),b=document.getElementById('deptBanner'),n=document.getElementById('deptBannerName');
+  if(!d||!b||!n)return;
+  n.textContent=(DEPT_FULL[d]||d)+' Department';
+  b.style.display='';
+})();
 (function(){
   var v=document.getElementById('ttViewer'),body=document.getElementById('ttViewerBody'),sz=document.getElementById('ttSizer'),st=document.getElementById('ttStage'),lbl=document.getElementById('ttZoomLbl'),src=document.getElementById('facultyTimetableContainer'),ob=document.getElementById('viewScheduleBtn');
   if(v&&body&&sz&&st&&src&&ob){
@@ -806,8 +799,6 @@
   var m=document.querySelector('main');
   if(m)new MutationObserver(enh).observe(m,{childList:true,subtree:true});
 })();
-</script>
-<script>
 (function(){
   var h=document.createElement('div');h.className='scroll-handle';h.innerHTML='<div class="sh-thumb" role="scrollbar" aria-orientation="vertical" aria-label="Scroll page"></div>';document.body.appendChild(h);
   var t=h.firstChild,mq=window.matchMedia('(max-width:768px),(pointer:coarse)'),hideT,drag=null,raf=0;
@@ -824,8 +815,6 @@
   t.addEventListener('pointerup',end);t.addEventListener('pointercancel',end);
   sched();
 })();
-</script>
-<script>
 (function(){
   var mq=window.matchMedia('(max-width:768px)');
   function rows(el){return Array.prototype.filter.call(el.querySelectorAll('tbody tr'),function(r){return !r.querySelector('td[colspan]');}).length;}
@@ -895,6 +884,7 @@
   if(m)new MutationObserver(sched).observe(m,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
   if(mq.addEventListener)mq.addEventListener('change',sched);
   refresh();
+})();
 })();
 </script>
 </body>
