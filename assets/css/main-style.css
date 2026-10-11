@@ -4502,3 +4502,412 @@ img, canvas { max-width: 100%; }
   .nav-left { gap: var(--space-4); }
   .nav-item { padding: 0.3125rem 0.625rem; font-size: 0.8125rem; }
 }
+
+/* ============================================================
+   WORKLOAD PANEL - mobile overflow fix
+   ============================================================ */
+.workload-grid { grid-template-columns: 260px minmax(0, 1fr); }
+.workload-grid > * { min-width: 0; }
+.workload-result-card { max-width: 100%; overflow: hidden; }
+.panel { overflow-x: hidden; }
+
+@media (max-width: 1100px) {
+  .workload-grid { grid-template-columns: minmax(0, 1fr); }
+  .workload-controls-card {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: var(--space-3) var(--space-4); padding: var(--space-4);
+  }
+  .workload-controls-card .ga-image { margin: 0; width: 64px; }
+  .workload-controls-card .subtitle { margin: 0; text-align: left; }
+  .workload-controls-card .btn,
+  .workload-controls-card .btn-full { width: auto; flex: 1 1 200px; }
+}
+
+@media (max-width: 900px) {
+  .page-header > div:first-child { flex: 1 1 100%; }
+  .page-header p { max-width: 100%; }
+  #gaTableWrapper { margin: 0 calc(var(--space-2) * -1); padding: 0 var(--space-2); }
+}
+
+@media (max-width: 600px) {
+  .workload-controls-card { flex-direction: column; text-align: center; }
+  .workload-controls-card .subtitle { text-align: center; }
+  .workload-controls-card .btn,
+  .workload-controls-card .btn-full { width: 100%; flex: 0 0 auto; }
+  .workload-result-card { padding: var(--space-4) var(--space-3); min-height: 0; }
+  .workload-result-card h3 { font-size: 1rem; }
+  .ga-loading { padding: var(--space-5) 0; }
+  .ga-loading .loader-row { flex-direction: column; }
+  #gaProgressContainer { width: 100%; }
+}
+
+/* Department banner (dashboard) */
+.dept-banner {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-5); padding: var(--space-3) var(--space-4);
+  background: var(--clr-primary-50); border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--clr-primary-600); border-radius: var(--radius-md);
+  color: var(--clr-primary-600);
+}
+.dept-banner svg { flex-shrink: 0; }
+.dept-banner-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.dept-banner-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.dept-banner-text strong { font-size: 1rem; color: var(--text-primary); overflow-wrap: anywhere; }
+@media print { .dept-banner { display: none; } }
+
+
+/* ============================================================
+   MOBILE: tables become cards (no horizontal scrolling),
+   dropdown becomes a bottom sheet, schedule opens in a viewer
+   ============================================================ */
+.tt-view-btn { display: none; }
+.tt-viewer[hidden] { display: none !important; }
+.tt-viewer { position: fixed; inset: 0; z-index: 20000; display: flex; flex-direction: column; background: var(--bg-surface); }
+.tt-viewer-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap;
+  padding: calc(var(--space-2) + env(safe-area-inset-top, 0px)) max(var(--space-3), env(safe-area-inset-right)) var(--space-2) max(var(--space-3), env(safe-area-inset-left));
+  border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface-2);
+}
+.tt-viewer-ctrls { display: flex; align-items: center; gap: var(--space-2); margin-left: auto; }
+.tt-viewer-ctrls button {
+  min-width: 44px; min-height: 44px; padding: 0 0.75rem; font-size: 1.125rem; line-height: 1;
+  background: var(--bg-surface); color: var(--text-primary); border: 1.5px solid var(--border-default); border-radius: var(--radius-md); box-shadow: none;
+}
+.tt-viewer-ctrls button:hover { background: var(--bg-surface-3); }
+.tt-viewer-ctrls #ttFit { font-size: 0.875rem; font-weight: 600; }
+.tt-viewer-ctrls #ttClose { background: var(--clr-primary-600); color: #fff; border-color: transparent; }
+#ttZoomLbl { min-width: 3.2em; text-align: center; font-size: 0.875rem; font-weight: 600; color: var(--text-secondary); }
+.tt-viewer-body { flex: 1; overflow: auto; padding: 8px; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.tt-sizer { position: relative; }
+.tt-stage { position: absolute; top: 0; left: 0; transform-origin: 0 0; width: max-content; min-width: 700px; }
+.tt-stage .timetable-scroll { overflow: visible; }
+.tt-viewer-hint { width: 100%; margin: 0; font-size: 0.75rem; color: var(--text-muted); }
+@media (min-width: 769px) { .tt-viewer { display: none !important; } }
+
+@media (max-width: 768px) {
+  #facultyTimetableContainer { display: none; }
+  .tt-view-btn { display: block; width: 100%; margin-top: var(--space-2); }
+
+  .faculty-scroll-wrap, #gaTableWrapper, #fairnessPerFaculty, .summary-faculty-card, .dashboard-chart-card > div[style*="overflow-x"] {
+    overflow: visible !important; margin: 0; padding-left: 0; padding-right: 0;
+  }
+  .faculty-scroll-wrap { border: 0; background: none; box-shadow: none; }
+  .summary-faculty-card { overflow: hidden !important; }
+  input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+  input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* multi-select specialization -> bottom sheet */
+  .multi-select-dropdown.open .dropdown-content {
+    position: fixed !important; left: 0 !important; right: 0 !important; top: auto !important; bottom: 0 !important;
+    width: 100% !important; max-width: 100%; max-height: 65vh; max-height: 65dvh; z-index: 10000 !important;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0; padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.28);
+  }
+  .dropdown-content label { min-height: 48px; padding: 0 var(--space-5); font-size: 1rem; }
+  .dropdown-ok-btn { position: sticky; bottom: 0; margin: var(--space-2) var(--space-4) var(--space-3); min-height: 48px; width: calc(100% - 2 * var(--space-4)); }
+
+  /* availability */
+  .avail-checkboxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; min-width: 0 !important; }
+  .avail-checkboxes label { justify-content: center; min-height: 44px; border: 1px solid var(--border-default); border-radius: var(--radius-md); }
+  .avail-select-all-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; min-width: 0 !important; margin-top: var(--space-2); }
+  .btn-select-day { min-height: 40px; }
+}
+
+@media (max-width: 768px) {
+#gaScheduleTable, #gaScheduleTable tbody, #gaScheduleTable tbody tr, #gaScheduleTable td { display: block; }
+#gaScheduleTable { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#gaScheduleTable colgroup { display: none; }
+#gaScheduleTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#gaScheduleTable tbody { display: grid; gap: var(--space-3); }
+#gaScheduleTable tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#gaScheduleTable td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#gaScheduleTable td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#gaScheduleTable td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#gaScheduleTable td[colspan]::before { content: none; }
+#gaScheduleTable td:nth-child(1)::before { content: none; }
+#gaScheduleTable td:nth-child(2)::before { content: none; }
+#gaScheduleTable td:nth-child(3)::before { content: "Section"; }
+#gaScheduleTable td:nth-child(4)::before { content: "Type"; }
+#gaScheduleTable td:nth-child(5)::before { content: "Class"; }
+#gaScheduleTable td:nth-child(6)::before { content: "Slot"; }
+#gaScheduleTable td:nth-child(7)::before { content: "Room"; }
+#gaScheduleTable td:nth-child(8)::before { content: "Students"; }
+#gaScheduleTable td:nth-child(9)::before { content: "Capacity"; }
+#gaScheduleTable td:nth-child(1) { grid-column: 1 / -1; }
+#gaScheduleTable td:nth-child(2) { grid-column: 1 / -1; }
+#gaScheduleTable td:nth-child(3) { grid-column: 1 / -1; }
+#gaScheduleTable td:nth-child(9) { grid-column: 1 / -1; }
+#gaScheduleTable td input[type="text"], #gaScheduleTable td input[type="number"], #gaScheduleTable td select, #gaScheduleTable td .dropdown-btn, #gaScheduleTable td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#gaScheduleTable td button.row-action-btn { width: 100%; min-height: 44px; }
+#gaScheduleTable td:nth-child(1) { font-size: 1.0625rem; font-weight: 700; }
+#roomUtilCapTable, #roomUtilCapTable tbody, #roomUtilCapTable tbody tr, #roomUtilCapTable td { display: block; }
+#roomUtilCapTable { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#roomUtilCapTable colgroup { display: none; }
+#roomUtilCapTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#roomUtilCapTable tbody { display: grid; gap: var(--space-3); }
+#roomUtilCapTable tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#roomUtilCapTable td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#roomUtilCapTable td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#roomUtilCapTable td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#roomUtilCapTable td[colspan]::before { content: none; }
+#roomUtilCapTable td:nth-child(1)::before { content: none; }
+#roomUtilCapTable td:nth-child(2)::before { content: "Assigned"; }
+#roomUtilCapTable td:nth-child(3)::before { content: "Occupancy"; }
+#roomUtilCapTable td:nth-child(4)::before { content: "Recommended cap"; }
+#roomUtilCapTable td:nth-child(5)::before { content: "Max cap"; }
+#roomUtilCapTable td:nth-child(1) { grid-column: 1 / -1; }
+#roomUtilCapTable td input[type="text"], #roomUtilCapTable td input[type="number"], #roomUtilCapTable td select, #roomUtilCapTable td .dropdown-btn, #roomUtilCapTable td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#roomUtilCapTable td button.row-action-btn { width: 100%; min-height: 44px; }
+
+#capacityDetailsTable, #capacityDetailsTable tbody, #capacityDetailsTable tbody tr, #capacityDetailsTable td { display: block; }
+#capacityDetailsTable { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#capacityDetailsTable colgroup { display: none; }
+#capacityDetailsTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#capacityDetailsTable tbody { display: grid; gap: var(--space-3); }
+#capacityDetailsTable tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#capacityDetailsTable td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#capacityDetailsTable td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#capacityDetailsTable td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#capacityDetailsTable td[colspan]::before { content: none; }
+#capacityDetailsTable td:nth-child(1)::before { content: "Room"; }
+#capacityDetailsTable td:nth-child(2)::before { content: "Section"; }
+#capacityDetailsTable td:nth-child(3)::before { content: "Subject"; }
+#capacityDetailsTable td:nth-child(4)::before { content: "Students"; }
+#capacityDetailsTable td:nth-child(5)::before { content: "Recommended"; }
+#capacityDetailsTable td:nth-child(6)::before { content: "Maximum"; }
+#capacityDetailsTable td:nth-child(7)::before { content: "Utilization"; }
+#capacityDetailsTable td:nth-child(8)::before { content: "Status"; }
+#capacityDetailsTable td:nth-child(3) { grid-column: 1 / -1; }
+#capacityDetailsTable td:nth-child(8) { grid-column: 1 / -1; }
+#capacityDetailsTable td input[type="text"], #capacityDetailsTable td input[type="number"], #capacityDetailsTable td select, #capacityDetailsTable td .dropdown-btn, #capacityDetailsTable td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#capacityDetailsTable td button.row-action-btn { width: 100%; min-height: 44px; }
+
+.summary-assignments-table, .summary-assignments-table tbody, .summary-assignments-table tbody tr, .summary-assignments-table td { display: block; }
+.summary-assignments-table { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+.summary-assignments-table colgroup { display: none; }
+.summary-assignments-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.summary-assignments-table tbody { display: grid; gap: var(--space-3); }
+.summary-assignments-table tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+.summary-assignments-table td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+.summary-assignments-table td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+.summary-assignments-table td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+.summary-assignments-table td[colspan]::before { content: none; }
+.summary-assignments-table td:nth-child(1)::before { content: none; }
+.summary-assignments-table td:nth-child(2)::before { content: "Type / Section"; }
+.summary-assignments-table td:nth-child(3)::before { content: "Schedule"; }
+.summary-assignments-table td:nth-child(4)::before { content: "Room & capacity"; }
+.summary-assignments-table td:nth-child(1) { grid-column: 1 / -1; }
+.summary-assignments-table td:nth-child(4) { grid-column: 1 / -1; }
+.summary-assignments-table td input[type="text"], .summary-assignments-table td input[type="number"], .summary-assignments-table td select, .summary-assignments-table td .dropdown-btn, .summary-assignments-table td .multi-select-dropdown { width: 100%; max-width: none !important; }
+.summary-assignments-table td button.row-action-btn { width: 100%; min-height: 44px; }
+.summary-assignments-table tbody { padding: var(--space-3); }
+.summary-assignments-table tbody tr { box-shadow: none; background: var(--bg-surface-2); }
+.summary-assignments-table td:nth-child(1) { font-weight: 600; }
+#fairnessPerFaculty table, #fairnessPerFaculty table tbody, #fairnessPerFaculty table tbody tr, #fairnessPerFaculty table td { display: block; }
+#fairnessPerFaculty table { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#fairnessPerFaculty table colgroup { display: none; }
+#fairnessPerFaculty table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#fairnessPerFaculty table tbody { display: grid; gap: var(--space-3); }
+#fairnessPerFaculty table tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#fairnessPerFaculty table td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#fairnessPerFaculty table td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#fairnessPerFaculty table td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#fairnessPerFaculty table td[colspan]::before { content: none; }
+#fairnessPerFaculty table td:nth-child(1)::before { content: none; }
+#fairnessPerFaculty table td:nth-child(2)::before { content: "Workload status"; }
+#fairnessPerFaculty table td:nth-child(3)::before { content: "Total classes"; }
+#fairnessPerFaculty table td:nth-child(4)::before { content: "Specialization accuracy"; }
+#fairnessPerFaculty table td:nth-child(1) { grid-column: 1 / -1; }
+#fairnessPerFaculty table td:nth-child(4) { grid-column: 1 / -1; }
+#fairnessPerFaculty table td input[type="text"], #fairnessPerFaculty table td input[type="number"], #fairnessPerFaculty table td select, #fairnessPerFaculty table td .dropdown-btn, #fairnessPerFaculty table td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#fairnessPerFaculty table td button.row-action-btn { width: 100%; min-height: 44px; }
+#fairnessPerFaculty table td:nth-child(1) { font-weight: 700; }
+#facultyTable, #facultyTable tbody, #facultyTable tbody tr, #facultyTable td { display: block; }
+#facultyTable { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#facultyTable colgroup { display: none; }
+#facultyTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#facultyTable tbody { display: grid; gap: var(--space-3); }
+#facultyTable tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#facultyTable td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#facultyTable td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#facultyTable td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#facultyTable td[colspan]::before { content: none; }
+#facultyTable td:nth-child(1)::before { content: "Name"; }
+#facultyTable td:nth-child(2)::before { content: "Specialization"; }
+#facultyTable td:nth-child(3)::before { content: "Max units"; }
+#facultyTable td:nth-child(4)::before { content: "Overload buffer"; }
+#facultyTable td:nth-child(5)::before { content: "Availability"; }
+#facultyTable td:nth-child(6)::before { content: none; }
+#facultyTable td:nth-child(1) { grid-column: 1 / -1; }
+#facultyTable td:nth-child(2) { grid-column: 1 / -1; }
+#facultyTable td:nth-child(5) { grid-column: 1 / -1; }
+#facultyTable td:nth-child(6) { grid-column: 1 / -1; }
+#facultyTable td input[type="text"], #facultyTable td input[type="number"], #facultyTable td select, #facultyTable td .dropdown-btn, #facultyTable td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#facultyTable td button.row-action-btn { width: 100%; min-height: 44px; }
+#facultyTable thead { position: static; width: auto; height: auto; overflow: visible; clip: auto; display: block; margin-bottom: var(--space-3); }
+#facultyTable thead tr { display: block; }
+#facultyTable thead th { display: none; }
+#facultyTable thead th.avail-th { display: block; padding: var(--space-3) var(--space-4); background: var(--bg-surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+#facultyTable thead .avail-th-label::after { content: " (apply to all faculty)"; font-weight: 400; color: var(--text-muted); text-transform: none; letter-spacing: 0; }
+#subjectsTable, #subjectsTable tbody, #subjectsTable tbody tr, #subjectsTable td { display: block; }
+#subjectsTable { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#subjectsTable colgroup { display: none; }
+#subjectsTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#subjectsTable tbody { display: grid; gap: var(--space-3); }
+#subjectsTable tbody tr { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#subjectsTable td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#subjectsTable td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#subjectsTable td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#subjectsTable td[colspan]::before { content: none; }
+#subjectsTable td:nth-child(1)::before { content: "Year"; }
+#subjectsTable td:nth-child(2)::before { content: "Semester"; }
+#subjectsTable td:nth-child(3)::before { content: "Subject name"; }
+#subjectsTable td:nth-child(4)::before { content: "Type"; }
+#subjectsTable td:nth-child(5)::before { content: "Lec units"; }
+#subjectsTable td:nth-child(6)::before { content: "Lab units"; }
+#subjectsTable td:nth-child(7)::before { content: "Total"; }
+#subjectsTable td:nth-child(8)::before { content: none; }
+#subjectsTable td:nth-child(1) { grid-column: span 3; }
+#subjectsTable td:nth-child(2) { grid-column: span 3; }
+#subjectsTable td:nth-child(3) { grid-column: span 6; }
+#subjectsTable td:nth-child(4) { grid-column: span 6; }
+#subjectsTable td:nth-child(5) { grid-column: span 2; }
+#subjectsTable td:nth-child(6) { grid-column: span 2; }
+#subjectsTable td:nth-child(7) { grid-column: span 2; }
+#subjectsTable td:nth-child(8) { grid-column: span 6; }
+#subjectsTable td input[type="text"], #subjectsTable td input[type="number"], #subjectsTable td select, #subjectsTable td .dropdown-btn, #subjectsTable td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#subjectsTable td button.row-action-btn { width: 100%; min-height: 44px; }
+#subjectsTable td.total-cell { font-weight: 700; }
+#classSizesTable, #classSizesTable tbody, #classSizesTable tbody tr, #classSizesTable td { display: block; }
+#classSizesTable { width: 100%; min-width: 0 !important; table-layout: auto; border: 0; background: none; }
+#classSizesTable colgroup { display: none; }
+#classSizesTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+#classSizesTable tbody { display: grid; gap: var(--space-3); }
+#classSizesTable tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; padding: var(--space-4); background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+#classSizesTable td { padding: 0; border: 0; background: none; min-width: 0; text-align: left !important; white-space: normal; overflow-wrap: anywhere; font-size: 0.9375rem; }
+#classSizesTable td::before { display: block; margin-bottom: 3px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+#classSizesTable td[colspan] { grid-column: 1 / -1; text-align: center !important; }
+#classSizesTable td[colspan]::before { content: none; }
+#classSizesTable td:nth-child(1)::before { content: "Section"; }
+#classSizesTable td:nth-child(2)::before { content: "Year"; }
+#classSizesTable td:nth-child(3)::before { content: "Block"; }
+#classSizesTable td:nth-child(4)::before { content: "Class size"; }
+#classSizesTable td:nth-child(5)::before { content: none; }
+#classSizesTable td:nth-child(5) { grid-column: 1 / -1; }
+#classSizesTable td input[type="text"], #classSizesTable td input[type="number"], #classSizesTable td select, #classSizesTable td .dropdown-btn, #classSizesTable td .multi-select-dropdown { width: 100%; max-width: none !important; }
+#classSizesTable td button.row-action-btn { width: 100%; min-height: 44px; }
+
+}
+
+/* ============================================================
+   FLAT LAYOUT: white page, no big enclosing cards
+   ============================================================ */
+html, body:has(.top-navbar) { background: #fff; }
+.panels-wrapper { background: #fff; padding-left: 0; padding-right: 0; }
+.panel {
+  background: transparent; border: 0; border-radius: 0; box-shadow: none;
+  padding-left: max(var(--space-10), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-10), env(safe-area-inset-right, 0px));
+}
+.dashboard-chart-card, .dashboard-chart-card:hover,
+.workload-result-card, .workload-result-card:hover,
+.chart-card, .chart-card:hover {
+  background: transparent !important; border: 0 !important; box-shadow: none !important;
+  padding-left: 0; padding-right: 0; border-radius: 0;
+}
+
+/* ============================================================
+   SCROLLBARS: easier to see and grab (desktop native)
+   ============================================================ */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: #f1ede9; }
+::-webkit-scrollbar-thumb { background: #b5aa9e; border: 3px solid #f1ede9; border-radius: 999px; min-height: 48px; min-width: 48px; }
+::-webkit-scrollbar-thumb:hover { background: #8c8176; }
+::-webkit-scrollbar-thumb:active { background: var(--clr-primary-600); }
+.panel::-webkit-scrollbar { width: 16px; }
+.panel::-webkit-scrollbar-track { background: #f6f3f0; border-left: 1px solid var(--border-subtle); }
+.panel::-webkit-scrollbar-thumb { background: #aa9f93; border: 4px solid #f6f3f0; border-radius: 999px; }
+.panel::-webkit-scrollbar-thumb:hover { background: #7f746a; }
+.panel::-webkit-scrollbar-thumb:active { background: var(--clr-primary-600); }
+@supports not selector(::-webkit-scrollbar) {
+  html, .panel { scrollbar-width: auto; scrollbar-color: #aa9f93 #f6f3f0; }
+}
+
+/* ============================================================
+   TOUCH: draggable scroll handle (injected by script)
+   ============================================================ */
+.scroll-handle { display: none; }
+@media (max-width: 768px), (pointer: coarse) {
+  .panel { scrollbar-width: none; }
+  .panel::-webkit-scrollbar { display: none; width: 0; }
+  .panel { padding-left: max(var(--space-4), env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+  .scroll-handle {
+    display: block; position: fixed; right: 0; width: 28px; z-index: 900; pointer-events: none;
+    top: calc(var(--nav-h) + 6px); bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .scroll-handle.can { opacity: 0.65; }
+  .scroll-handle.can.on, .scroll-handle.can.drag { opacity: 1; }
+  .sh-thumb {
+    position: absolute; right: 3px; width: 12px; min-height: 56px; border-radius: 999px; pointer-events: auto; touch-action: none;
+    background: var(--clr-primary-600); box-shadow: 0 0 0 2px #fff, 0 1px 6px rgba(0, 0, 0, 0.25);
+    transition: width 0.15s, background 0.15s;
+  }
+  .sh-thumb::before { content: ""; position: absolute; top: 0; bottom: 0; left: -10px; right: -10px; }
+  .scroll-handle.drag .sh-thumb { width: 16px; background: var(--clr-primary-700); }
+}
+@media (max-width: 520px) {
+  .panel { padding-left: max(14px, env(safe-area-inset-left, 0px)); }
+}
+
+/* ============================================================
+   MOBILE: long result lists collapse into named dropdowns
+   ============================================================ */
+.m-acc { display: none; }
+@media (max-width: 768px) {
+  .m-acc {
+    display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 52px;
+    margin: var(--space-2) 0 var(--space-3); padding: 0 var(--space-4);
+    background: var(--bg-surface-2); color: var(--text-primary);
+    border: 1.5px solid var(--border-default); border-radius: var(--radius-lg);
+    font-size: 1rem; font-weight: 600; text-align: left; box-shadow: none;
+  }
+  .m-acc:hover { background: var(--bg-surface-3); }
+  .m-acc[hidden] { display: none; }
+  .m-acc[aria-expanded="true"] { background: var(--clr-primary-50); border-color: var(--clr-primary-600); }
+  .m-acc-title { flex: 1; min-width: 0; }
+  .m-acc-count { min-width: 28px; padding: 2px 10px; border-radius: 999px; background: var(--clr-primary-50); color: var(--clr-primary-600); font-size: 0.8125rem; text-align: center; }
+  .m-acc[aria-expanded="true"] .m-acc-count { background: #fff; }
+  .m-acc-chev { width: 10px; height: 10px; margin: -4px 4px 0 0; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.2s; }
+  .m-acc[aria-expanded="true"] .m-acc-chev { transform: rotate(-135deg); margin-top: 4px; }
+  .m-closed { display: none !important; }
+
+  /* curriculum groups: each year/semester is its own dropdown */
+  .curriculum-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 52px; cursor: pointer; }
+  .curriculum-header::after { content: attr(data-count) "  \25BE"; font-size: 0.8125rem; font-weight: 600; color: var(--clr-primary-600); white-space: nowrap; }
+  .curriculum-group.open .curriculum-header::after { content: attr(data-count) "  \25B4"; }
+  .curriculum-group:not(.open) .curriculum-table { display: none; }
+  .curriculum-table, .curriculum-table tbody, .curriculum-table tr, .curriculum-table td { display: block; width: 100%; min-width: 0; }
+  .curriculum-table thead { display: none; }
+  .curriculum-table tbody tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border-subtle); }
+  .curriculum-table td { padding: 0; border: 0; text-align: left !important; font-size: 0.9375rem; overflow-wrap: anywhere; }
+  .curriculum-table td:nth-child(1), .curriculum-table td:nth-child(2) { grid-column: 1 / -1; }
+  .curriculum-table td:nth-child(n+3)::before { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+  .curriculum-table td:nth-child(3)::before { content: "Lec"; }
+  .curriculum-table td:nth-child(4)::before { content: "Lab"; }
+  .curriculum-table td:nth-child(5)::before { content: "Hours"; }
+}
+
+/* ============================================================
+   MOBILE: button rows wrap instead of overflowing
+   ============================================================ */
+@media (max-width: 768px) {
+  .panel div[style*="display:flex"] { flex-wrap: wrap !important; }
+  .panel div[style*="display:flex"][style*="gap:10px"] { gap: var(--space-2) !important; }
+  .panel div[style*="display:flex"][style*="gap:10px"] > .btn {
+    flex: 1 1 calc(50% - var(--space-2)); min-width: 0; white-space: normal; text-align: center; justify-content: center;
+  }
+  .panel div[style*="display:flex"][style*="gap:10px"] > .btn:first-child { flex-basis: 100%; }
+  .panel .btn { max-width: 100%; }
+  .panel .btn[style*="padding:0.3rem"] { min-height: 44px; padding: 0.5rem 1rem !important; font-size: 0.875rem !important; }
+}
