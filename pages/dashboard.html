@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+  <meta name="theme-color" content="#9a3608">
   <title>Dashboard</title>
 
   <!-- Auth guard (lives in main-script.js → initDashboardPage) -->
@@ -284,7 +287,7 @@
 
         <div class="dashboard-chart-card" style="margin-bottom:28px;">
           <h3>Subject Assignments by Faculty &amp; Time</h3>
-          <button type="button" class="btn btn-full tt-view-btn" id="viewScheduleBtn">View Schedule</button>
+          <button type="button" class="btn btn-full tt-view-btn" id="viewScheduleBtn" data-viewer-src="#facultyTimetableContainer" data-viewer-title="Schedule">View Schedule</button>
           <div id="facultyTimetableContainer" class="timetable-outer">
             <p class="empty-state-msg">Run the optimization to see the schedule timetable.</p>
           </div>
@@ -729,68 +732,19 @@
   <!-- Toast notification -->
   <div id="toastNotif" class="toast-notif" aria-live="polite"></div>
 
-<div class="tt-viewer" id="ttViewer" role="dialog" aria-modal="true" aria-label="Schedule viewer" hidden>
-  <div class="tt-viewer-bar">
-    <strong>Schedule</strong>
-    <div class="tt-viewer-ctrls">
-      <button type="button" id="ttZoomOut" aria-label="Zoom out">&minus;</button>
-      <span id="ttZoomLbl">100%</span>
-      <button type="button" id="ttZoomIn" aria-label="Zoom in">+</button>
-      <button type="button" id="ttFit" aria-label="Fit to screen">Fit</button>
-      <button type="button" id="ttClose" aria-label="Close schedule viewer">&#10005;</button>
-    </div>
-    <p class="tt-viewer-hint">Pinch to zoom, drag to move.</p>
-  </div>
-  <div class="tt-viewer-body" id="ttViewerBody"><div class="tt-sizer" id="ttSizer"><div class="tt-stage" id="ttStage"></div></div></div>
-</div>
 <script>
 (function(){
   var DEPT_SHORT={IT:'IT Dept',CS:'CS Dept',MB:'Marine Bio',ES:'Env. Science',MedB:'Med Biology'};
   var DEPT_FULL={IT:'Information Technology',CS:'Computer Science',MB:'Marine Biology',ES:'Environmental Science',MedB:'Medical Biology'};
-(function(){
-  var btn=document.getElementById('navHamburger'),dr=document.getElementById('navDrawer'),ov=document.getElementById('navDrawerOverlay');
-  if(!btn||!dr||!ov)return;
-  var items=dr.querySelectorAll('[data-go]');
-  var u=sessionStorage.getItem('atlasUser'),d=sessionStorage.getItem('atlasDept'),l=document.getElementById('drawerUserLabel');
-  if(l&&u)l.textContent=u+(d?' \u00b7 '+(DEPT_SHORT[d]||d):'');
-  function sync(){var ps=Array.prototype.slice.call(document.querySelectorAll('.panel'));var i=ps.findIndex(function(p){return p.classList.contains('active');});items.forEach(function(it){it.classList.toggle('active',+it.dataset.go===i);});}
-  function set(o){dr.classList.toggle('open',o);ov.classList.toggle('open',o);btn.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu');dr.setAttribute('aria-hidden',!o);if(o)sync();}
-  btn.addEventListener('click',function(){set(!dr.classList.contains('open'));});
-  ov.addEventListener('click',function(){set(false);});
-  items.forEach(function(it){it.addEventListener('click',function(){window.switchPanel(+it.dataset.go);set(false);setTimeout(sync,60);});});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});
-  window.addEventListener('resize',function(){if(window.innerWidth>900)set(false);});
-  document.querySelectorAll('.nav-item[data-panel]').forEach(function(n){n.addEventListener('click',function(){setTimeout(sync,60);});});
-  sync();
-})();
-(function(){
-  var d=sessionStorage.getItem('atlasDept'),b=document.getElementById('deptBanner'),n=document.getElementById('deptBannerName');
-  if(!d||!b||!n)return;
-  n.textContent=(DEPT_FULL[d]||d)+' Department';
-  b.style.display='';
-})();
-(function(){
-  var v=document.getElementById('ttViewer'),body=document.getElementById('ttViewerBody'),sz=document.getElementById('ttSizer'),st=document.getElementById('ttStage'),lbl=document.getElementById('ttZoomLbl'),src=document.getElementById('facultyTimetableContainer'),ob=document.getElementById('viewScheduleBtn');
-  if(v&&body&&sz&&st&&src&&ob){
-    var z=1,nw=700,nh=400,MIN=0.25,MAX=3;
-    function apply(nz,cx,cy){nz=Math.min(MAX,Math.max(MIN,nz));var px=(body.scrollLeft+cx)/z,py=(body.scrollTop+cy)/z;z=nz;st.style.transform='scale('+z+')';sz.style.width=(nw*z)+'px';sz.style.height=(nh*z)+'px';body.scrollLeft=px*z-cx;body.scrollTop=py*z-cy;lbl.textContent=Math.round(z*100)+'%';}
-    function mid(f){apply(z*f,body.clientWidth/2,body.clientHeight/2);}
-    function fit(){apply((body.clientWidth-16)/nw,0,0);body.scrollLeft=0;body.scrollTop=0;}
-    function open(){st.innerHTML=src.innerHTML;st.style.transform='none';v.hidden=false;nw=st.offsetWidth||700;nh=st.offsetHeight||400;z=1;fit();document.getElementById('ttClose').focus();}
-    function close(){v.hidden=true;ob.focus();}
-    ob.addEventListener('click',open);
-    document.getElementById('ttClose').addEventListener('click',close);
-    document.getElementById('ttZoomIn').addEventListener('click',function(){mid(1.25);});
-    document.getElementById('ttZoomOut').addEventListener('click',function(){mid(0.8);});
-    document.getElementById('ttFit').addEventListener('click',fit);
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!v.hidden)close();});
-    body.addEventListener('wheel',function(e){if(e.ctrlKey){e.preventDefault();var r=body.getBoundingClientRect();apply(z*(e.deltaY<0?1.1:0.9),e.clientX-r.left,e.clientY-r.top);}},{passive:false});
-    var d0=0,z0=1;
-    function dist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
-    body.addEventListener('touchstart',function(e){if(e.touches.length===2){d0=dist(e.touches);z0=z;}},{passive:true});
-    body.addEventListener('touchmove',function(e){if(e.touches.length===2&&d0){e.preventDefault();var r=body.getBoundingClientRect();apply(z0*dist(e.touches)/d0,(e.touches[0].clientX+e.touches[1].clientX)/2-r.left,(e.touches[0].clientY+e.touches[1].clientY)/2-r.top);}},{passive:false});
-    body.addEventListener('touchend',function(e){if(e.touches.length<2)d0=0;});
-  }
+
+  /* department shown in the drawer and the dashboard banner */
+  var user=sessionStorage.getItem('atlasUser'),dept=sessionStorage.getItem('atlasDept');
+  var label=document.getElementById('drawerUserLabel');
+  if(label&&user)label.textContent=user+(dept?' \u00b7 '+(DEPT_SHORT[dept]||dept):'');
+  var banner=document.getElementById('deptBanner'),bannerName=document.getElementById('deptBannerName');
+  if(dept&&banner&&bannerName){bannerName.textContent=(DEPT_FULL[dept]||dept)+' Department';banner.style.display='';}
+
+  /* mobile-friendly input hints */
   function enh(){
     document.querySelectorAll('input[type=number]').forEach(function(i){if(!i.hasAttribute('inputmode')){i.setAttribute('inputmode','decimal');i.setAttribute('enterkeyhint','done');}});
     document.querySelectorAll('#facultyTable td:first-child input[type=text], #subjectsTable .subject-name').forEach(function(i){if(!i.hasAttribute('autocapitalize')){i.setAttribute('autocapitalize','words');i.setAttribute('autocomplete','off');i.setAttribute('enterkeyhint','next');}});
@@ -798,23 +752,8 @@
   enh();
   var m=document.querySelector('main');
   if(m)new MutationObserver(enh).observe(m,{childList:true,subtree:true});
-})();
-(function(){
-  var h=document.createElement('div');h.className='scroll-handle';h.innerHTML='<div class="sh-thumb" role="scrollbar" aria-orientation="vertical" aria-label="Scroll page"></div>';document.body.appendChild(h);
-  var t=h.firstChild,mq=window.matchMedia('(max-width:768px),(pointer:coarse)'),hideT,drag=null,raf=0;
-  function P(){return document.querySelector('.panel.active');}
-  function upd(){var p=P();if(!p||!mq.matches){h.classList.remove('can');return;}var max=p.scrollHeight-p.clientHeight;if(max<=4){h.classList.remove('can');return;}h.classList.add('can');var th=h.clientHeight,tH=Math.max(56,th*p.clientHeight/p.scrollHeight);t.style.height=tH+'px';t.style.top=(p.scrollTop/max)*(th-tH)+'px';}
-  function sched(){if(!raf)raf=requestAnimationFrame(function(){raf=0;upd();});}
-  function flash(){h.classList.add('on');clearTimeout(hideT);hideT=setTimeout(function(){if(!drag)h.classList.remove('on');},1400);}
-  document.addEventListener('scroll',function(e){if(e.target.classList&&e.target.classList.contains('panel')){sched();flash();}},true);
-  window.addEventListener('resize',sched);
-  var m=document.querySelector('main');if(m)new MutationObserver(sched).observe(m,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
-  t.addEventListener('pointerdown',function(e){var p=P();if(!p)return;e.preventDefault();t.setPointerCapture(e.pointerId);drag={y:e.clientY,s:p.scrollTop};h.classList.add('drag','on');});
-  t.addEventListener('pointermove',function(e){if(!drag)return;var p=P();if(!p)return;var max=p.scrollHeight-p.clientHeight;p.scrollTop=drag.s+(e.clientY-drag.y)*max/Math.max(1,h.clientHeight-t.offsetHeight);});
-  function end(){drag=null;h.classList.remove('drag');flash();}
-  t.addEventListener('pointerup',end);t.addEventListener('pointercancel',end);
-  sched();
-})();
+
+  /* long result lists collapse into named dropdowns on mobile */
 (function(){
   var mq=window.matchMedia('(max-width:768px)');
   function rows(el){return Array.prototype.filter.call(el.querySelectorAll('tbody tr'),function(r){return !r.querySelector('td[colspan]');}).length;}
@@ -887,5 +826,6 @@
 })();
 })();
 </script>
+<script src="../assets/js/shared-ui.js" defer></script>
 </body>
 </html>

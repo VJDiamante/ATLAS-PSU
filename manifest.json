@@ -1,0 +1,19 @@
+{
+  "name": "ATLAS PSU - Automated Teaching Load Assignment System",
+  "short_name": "ATLAS PSU",
+  "description": "Faculty workload optimization and class schedules for Palawan State University.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#9a3608",
+  "icons": [
+    {
+      "src": "assets/images/favicon.png",
+      "sizes": "1749x1749",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

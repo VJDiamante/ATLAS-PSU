@@ -4,240 +4,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+  <meta name="theme-color" content="#9a3608">
   <title>Login | ATLAS PSU</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/main-style.css">
+  <script src="../assets/js/login-script.js" defer></script>
 </head>
 <body class="page-login">
 
-  <div class="login-card">
+  <main class="login-card">
+    <a href="../index.html" class="login-back">&larr; Back</a>
+
     <div class="brand-top">ATLAS PSU</div>
     <h1>Welcome</h1>
     <p class="subtitle">Automated Teaching Load Assignment System</p>
 
-    <!-- Sign In / Sign Up toggle, reusing existing .nav-item / .nav-menu styles -->
-    <div class="nav-menu" id="authTabs" style="justify-content:center; margin-bottom: var(--space-6);">
-      <button type="button" class="nav-item active" id="tabSignIn" data-tab="signin">Sign In</button>
-      <button type="button" class="nav-item" id="tabSignUp" data-tab="signup">Sign Up</button>
+    <!-- Who is signing in -->
+    <div class="role-switch" role="tablist" aria-label="Account type">
+      <button type="button" class="seg-btn active" role="tab" aria-selected="true" data-role="chairperson">Chairperson</button>
+      <button type="button" class="seg-btn" role="tab" aria-selected="false" data-role="faculty">Faculty</button>
     </div>
 
-    <div class="error-msg" id="errorMsg"></div>
+    <!-- Sign in or create an account -->
+    <div class="auth-tabs" role="tablist" aria-label="Sign in or sign up">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true" data-mode="signin">Sign In</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" data-mode="signup">Sign Up</button>
+    </div>
 
-    <!-- ================= SIGN IN FORM ================= -->
-    <form id="signInForm">
-      <label for="siDepartment">Department</label>
-      <div class="select-wrap">
-        <select id="siDepartment" required>
-          <option value="" disabled selected>Select your department</option>
-          <option value="IT">Information Technology</option>
-          <option value="CS">Computer Science</option>
-          <option value="MB">Marine Biology</option>
-          <option value="ES">Environmental Science</option>
-          <option value="MedB">Medical Biology</option>
-        </select>
+    <div class="error-msg" id="errorMsg" role="alert"></div>
+
+    <form id="authForm" data-role="chairperson" data-mode="signin" novalidate>
+
+      <div class="login-field only-faculty">
+        <label for="facultyName">Faculty member</label>
+        <div class="select-wrap">
+          <select id="facultyName"></select>
+        </div>
+        <input type="text" id="facultyManual" class="login-manual" placeholder="Enter your full name" autocomplete="name" autocapitalize="words" hidden>
+        <p class="login-hint" id="facultyHint" hidden>No faculty list was found on this device, so please type your name.</p>
       </div>
 
-      <label for="siEmail">Corporate Email</label>
-      <input
-        type="text"
-        id="siEmail"
-        placeholder="yourname@psu.palawan.edu.ph"
-        autocomplete="username"
-        inputmode="email"
-        pattern="^[a-zA-Z0-9._%+-]+@psu\.palawan\.edu\.ph$"
-        title="Please use your PSU corporate email (e.g. name@psu.palawan.edu.ph)"
-        required
-      >
-
-      <label for="siPassword">Password</label>
-      <input type="password" id="siPassword" placeholder="Enter password" autocomplete="current-password" required>
-
-      <label class="sc-checkbox-label" style="margin-bottom: var(--space-4);">
-        <input type="checkbox" id="siRemember">
-        Remember me
-      </label>
-
-      <button type="button" class="btn-login-submit" id="btnSignIn">Sign In</button>
-
-      <div class="login-footer-text">
-        <a href="../index.html">← Back</a>
+      <div class="login-field only-chair only-signup">
+        <label for="fullName">Full name</label>
+        <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name" autocapitalize="words">
       </div>
+
+      <div class="login-field">
+        <label for="department">Department</label>
+        <div class="select-wrap">
+          <select id="department">
+            <option value="" disabled selected>Select your department</option>
+            <option value="IT">Information Technology</option>
+            <option value="CS">Computer Science</option>
+            <option value="MB">Marine Biology</option>
+            <option value="ES">Environmental Science</option>
+            <option value="MedB">Medical Biology</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="email">Corporate email</label>
+        <input type="text" id="email" placeholder="yourname@psu.palawan.edu.ph" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false">
+      </div>
+
+      <div class="login-field">
+        <label for="password">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+          <button type="button" class="pw-toggle" data-target="password" aria-label="Show password">Show</button>
+        </div>
+      </div>
+
+      <div class="login-field only-signup">
+        <label for="confirmPassword">Confirm password</label>
+        <div class="pw-wrap">
+          <input type="password" id="confirmPassword" placeholder="Re-enter password" autocomplete="new-password">
+          <button type="button" class="pw-toggle" data-target="confirmPassword" aria-label="Show password">Show</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login-submit" id="submitBtn">Sign In</button>
     </form>
+  </main>
 
-    <!-- ================= SIGN UP FORM ================= -->
-    <form id="signUpForm" class="hidden">
-      <label for="suFullName">Full Name</label>
-      <input type="text" id="suFullName" placeholder="Enter your full name" autocomplete="name" required>
-
-      <label for="suDepartment">Department</label>
-      <div class="select-wrap">
-        <select id="suDepartment" required>
-          <option value="" disabled selected>Select your department</option>
-          <option value="IT">Information Technology</option>
-          <option value="CS">Computer Science</option>
-          <option value="MB">Marine Biology</option>
-          <option value="ES">Environmental Science</option>
-          <option value="MedB">Medical Biology</option>
-        </select>
-      </div>
-
-      <label for="suRole">Role</label>
-      <div class="select-wrap">
-        <select id="suRole" required>
-          <option value="" disabled selected>Select your role</option>
-          <option value="chairperson">Department Chairperson</option>
-          <option value="faculty">Faculty Member</option>
-        </select>
-      </div>
-
-      <label for="suEmail">Corporate Email</label>
-      <input
-        type="text"
-        id="suEmail"
-        placeholder="yourname@psu.palawan.edu.ph"
-        autocomplete="username"
-        inputmode="email"
-        pattern="^[a-zA-Z0-9._%+-]+@psu\.palawan\.edu\.ph$"
-        title="Please use your PSU corporate email (e.g. name@psu.palawan.edu.ph)"
-        required
-      >
-
-      <label for="suPassword">Password</label>
-      <input type="password" id="suPassword" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
-
-      <label for="suConfirmPassword">Confirm Password</label>
-      <input type="password" id="suConfirmPassword" placeholder="Re-enter password" autocomplete="new-password" minlength="8" required>
-
-      <button type="button" class="btn-login-submit" id="btnSignUp">Create Account</button>
-
-      <div class="login-footer-text">
-        <a href="../index.html">← Back</a>
-      </div>
-    </form>
-  </div>
-
-  <script src="../assets/js/main-script.js" defer></script>
-  <script>
-    // On success, this sets the same sessionStorage keys main-script.js's
-    // dashboard auth guard and initDashboardPage() already read:
-    //   sessionStorage.atlasUser  -> shown in the navbar
-    //   sessionStorage.atlasDept  -> shown in the navbar, next to the name
-    // That's what dashboard.html checks before letting you stay on the page;
-    // without those keys set, it redirects straight back to login.html.
-    (function () {
-      const tabSignIn = document.getElementById('tabSignIn');
-      const tabSignUp = document.getElementById('tabSignUp');
-      const signInForm = document.getElementById('signInForm');
-      const signUpForm = document.getElementById('signUpForm');
-      const errorMsg = document.getElementById('errorMsg');
-      const DOMAIN = '@psu.palawan.edu.ph';
-
-      function showTab(tab) {
-        const isSignIn = tab === 'signin';
-        tabSignIn.classList.toggle('active', isSignIn);
-        tabSignUp.classList.toggle('active', !isSignIn);
-        signInForm.classList.toggle('hidden', !isSignIn);
-        signUpForm.classList.toggle('hidden', isSignIn);
-        errorMsg.classList.remove('show');
-        errorMsg.textContent = '';
-      }
-
-      tabSignIn.addEventListener('click', () => showTab('signin'));
-      tabSignUp.addEventListener('click', () => showTab('signup'));
-
-      // Prevent native form submission (page reload) on Enter key; the
-      // keydown handler below routes Enter to the correct custom handler instead.
-      signInForm.addEventListener('submit', (e) => e.preventDefault());
-      signUpForm.addEventListener('submit', (e) => e.preventDefault());
-
-      function showError(message) {
-        errorMsg.textContent = message;
-        errorMsg.classList.add('show');
-      }
-
-      function isCorporateEmail(email) {
-        return email.toLowerCase().endsWith(DOMAIN);
-      }
-
-      // ---- Sign In ----
-      document.getElementById('btnSignIn').addEventListener('click', function () {
-        const dept = document.getElementById('siDepartment').value;
-        const email = document.getElementById('siEmail').value.trim();
-        const password = document.getElementById('siPassword').value;
-
-        if (!dept) {
-          showError('Please select your department.');
-          return;
-        }
-        if (!isCorporateEmail(email)) {
-          showError('Please sign in with your PSU corporate email (name@psu.palawan.edu.ph).');
-          return;
-        }
-        if (!password) {
-          showError('Please enter your password.');
-          return;
-        }
-
-        // TODO: replace with a real auth call to the Flask backend once available.
-        // For now this mirrors main-script.js's own login flow so dashboard.html's
-        // auth guard sees a valid session and does not redirect back here.
-        sessionStorage.setItem('atlasUser', email);
-        sessionStorage.setItem('atlasDept', dept);
-        window.location.href = 'dashboard.html';
-      });
-
-      // ---- Sign Up ----
-      document.getElementById('btnSignUp').addEventListener('click', function () {
-        const fullName = document.getElementById('suFullName').value.trim();
-        const dept = document.getElementById('suDepartment').value;
-        const role = document.getElementById('suRole').value;
-        const email = document.getElementById('suEmail').value.trim();
-        const pw = document.getElementById('suPassword').value;
-        const confirmPw = document.getElementById('suConfirmPassword').value;
-
-        if (!fullName) {
-          showError('Please enter your full name.');
-          return;
-        }
-        if (!dept) {
-          showError('Please select your department.');
-          return;
-        }
-        if (!role) {
-          showError('Please select your role.');
-          return;
-        }
-        if (!isCorporateEmail(email)) {
-          showError('Please register with your PSU corporate email (name@psu.palawan.edu.ph).');
-          return;
-        }
-        if (pw.length < 8) {
-          showError('Password must be at least 8 characters.');
-          return;
-        }
-        if (pw !== confirmPw) {
-          showError('Passwords do not match.');
-          return;
-        }
-
-        // TODO: replace with a real registration call to the Flask backend once available.
-        sessionStorage.setItem('atlasUser', fullName);
-        sessionStorage.setItem('atlasDept', dept);
-        sessionStorage.setItem('atlasRole', role);
-        window.location.href = 'dashboard.html';
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key !== 'Enter') return;
-        if (!signUpForm.classList.contains('hidden')) {
-          document.getElementById('btnSignUp').click();
-        } else {
-          document.getElementById('btnSignIn').click();
-        }
-      });
-    })();
-  </script>
 </body>
 </html>

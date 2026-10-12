@@ -1,0 +1,130 @@
+/* ============================================================
+   ATLAS PSU - faculty side (faculty/dashboard.html)
+   Builds on main-style.css tokens and components.
+   ============================================================ */
+
+/* ---------- Reminder banner ---------- */
+.fs-alert {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3);
+  margin-bottom: var(--space-4); padding: var(--space-3) var(--space-4);
+  background: #fffbeb; color: #78350f;
+  border: 1px solid #fcd34d; border-left: 4px solid #f59e0b; border-radius: var(--radius-md);
+}
+.fs-alert[hidden] { display: none; }
+.fs-alert-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fs-alert-text strong { font-size: 1rem; }
+.fs-alert-close {
+  flex-shrink: 0; width: 44px; height: 44px; margin: -8px -8px -8px 0; padding: 0;
+  background: transparent; color: inherit; border: 0; box-shadow: none; font-size: 1.125rem;
+}
+
+/* ---------- Clock + current / next class ---------- */
+.fs-now { display: grid; grid-template-columns: minmax(220px, 1fr) 2fr; gap: var(--space-4); margin-bottom: var(--space-5); }
+.fs-clock, .fs-status {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--card-shadow);
+}
+.fs-clock-time { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+.fs-clock-date { margin-top: var(--space-1); color: var(--text-secondary); font-size: 0.9375rem; }
+.fs-status { display: flex; flex-direction: column; gap: 4px; border-left: 4px solid var(--clr-primary-400); min-width: 0; }
+.fs-status-live { border-left-color: var(--clr-success-500); background: #f0fdf4; }
+.fs-status-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.fs-status-title { font-size: 1.25rem; line-height: 1.3; color: var(--text-primary); overflow-wrap: anywhere; }
+.fs-status-meta { color: var(--text-secondary); font-size: 0.9375rem; }
+.fs-status-count { margin-top: var(--space-1); font-weight: 700; color: var(--clr-primary-600); }
+.fs-status-live .fs-status-count { color: #166534; }
+
+/* ---------- Tabs ---------- */
+.fs-tabs { display: flex; gap: 6px; margin: var(--space-5) 0 var(--space-4); padding: 4px; background: var(--bg-surface-3); border-radius: var(--radius-lg); }
+.fs-tab {
+  flex: 1; min-height: 44px; padding: 0 var(--space-3);
+  background: transparent; color: var(--text-secondary); border: 0; border-radius: var(--radius-md);
+  font-size: 0.9375rem; font-weight: 600; box-shadow: none;
+}
+.fs-tab:hover { background: rgba(255, 255, 255, 0.6); }
+.fs-tab.active { background: var(--bg-surface); color: var(--clr-primary-600); box-shadow: var(--shadow-sm); }
+
+/* ---------- Chips ---------- */
+.fs-chip { display: inline-block; margin-left: var(--space-2); padding: 2px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; vertical-align: middle; }
+.fs-class-tags .fs-chip { margin-left: 0; }
+.fs-chip-live { background: #dcfce7; color: #166534; }
+.fs-chip-today { background: var(--clr-primary-50); color: var(--clr-primary-600); }
+.fs-chip-done { background: var(--bg-surface-3); color: var(--text-muted); }
+
+/* ---------- Class cards ---------- */
+.fs-day { margin-bottom: var(--space-5); }
+.fs-day h3 { margin-bottom: var(--space-2); font-size: 1rem; color: var(--text-primary); }
+.fs-class {
+  display: flex; gap: var(--space-4); margin-bottom: var(--space-2); padding: var(--space-3) var(--space-4);
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+}
+.fs-day-today .fs-class { border-left: 4px solid var(--clr-primary-400); }
+.fs-class-time { flex: 0 0 5.5rem; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.fs-class-time small { display: block; font-size: 0.75rem; font-weight: 500; color: var(--text-muted); }
+.fs-class-body { flex: 1; min-width: 0; }
+.fs-class-subject { font-weight: 600; color: var(--text-primary); overflow-wrap: anywhere; }
+.fs-class-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.fs-room { padding: 2px 10px; border-radius: 999px; background: var(--clr-primary-50); color: var(--clr-primary-600); font-size: 0.8rem; font-weight: 600; }
+.fs-time-inline { color: var(--text-muted); font-size: 0.8rem; }
+
+/* ---------- Empty state ---------- */
+.fs-empty { padding: var(--space-8) var(--space-5); text-align: center; color: var(--text-muted); background: var(--bg-surface-2); border: 1px dashed var(--border-default); border-radius: var(--radius-lg); }
+
+/* ---------- Week / viewer ---------- */
+.fs-hidden-source { display: none; }
+.fs-view-btn { display: none; margin-bottom: var(--space-3); }
+.fs-live-cell { box-shadow: inset 0 0 0 2px var(--clr-success-500); }
+
+/* ---------- All faculty ---------- */
+.fs-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-3); margin-bottom: var(--space-4); }
+.fs-toolbar .fs-field { flex: 1 1 220px; margin: 0; }
+.fs-faculty { margin-bottom: var(--space-3); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+.fs-faculty summary {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  min-height: 52px; padding: 0 var(--space-4); list-style: none; cursor: pointer; font-weight: 600;
+}
+.fs-faculty summary::-webkit-details-marker { display: none; }
+.fs-faculty summary::after { content: "\25BE"; margin-left: var(--space-2); color: var(--clr-primary-600); }
+.fs-faculty[open] summary::after { content: "\25B4"; }
+.fs-faculty[open] summary { background: var(--clr-primary-50); }
+.fs-faculty-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.fs-faculty-count { font-size: 0.8125rem; font-weight: 600; color: var(--text-muted); }
+.fs-faculty-body { padding: var(--space-3); }
+.fs-class-compact { background: var(--bg-surface-2); }
+
+/* ---------- Settings ---------- */
+.fs-card { margin-bottom: var(--space-4); padding: var(--space-5); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); box-shadow: var(--card-shadow); }
+.fs-card h3 { margin-bottom: var(--space-3); font-size: 1.0625rem; }
+.fs-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-4); }
+.fs-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--space-3); }
+.fs-form .fs-field { margin-bottom: 0; }
+.fs-field label { font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); }
+.fs-field input, .fs-field select {
+  width: 100%; min-height: 44px; padding: 0.625rem 0.875rem;
+  font-family: var(--font-sans); font-size: 1rem; color: var(--text-primary);
+  background: var(--bg-surface); border: 1.5px solid var(--input-border); border-radius: var(--radius-md);
+}
+.fs-field input:focus, .fs-field select:focus { outline: none; border-color: var(--clr-primary-500); }
+.fs-readonly { display: flex; align-items: center; min-height: 44px; padding: 0 0.875rem; background: var(--bg-surface-2); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-secondary); }
+.fs-switch { display: flex; align-items: center; gap: var(--space-3); min-height: 44px; cursor: pointer; }
+.fs-switch input { width: 22px; height: 22px; flex-shrink: 0; accent-color: var(--clr-primary-600); }
+.fs-help { margin-bottom: var(--space-3); font-size: 0.875rem; color: var(--text-muted); }
+.fs-error { margin-bottom: var(--space-3); color: #b91c1c; font-size: 0.875rem; font-weight: 600; }
+.fs-error[hidden] { display: none; }
+.fs-logout { display: inline-flex; justify-content: center; text-decoration: none; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .fs-now { grid-template-columns: 1fr; gap: var(--space-3); }
+  .fs-clock, .fs-status { padding: var(--space-4); }
+  .fs-clock-time { font-size: 1.75rem; }
+  .fs-week { display: none; }
+  .fs-view-btn { display: block; }
+  .fs-tab { padding: 0 var(--space-2); font-size: 0.875rem; }
+  .fs-class { gap: var(--space-3); padding: var(--space-3); }
+  .fs-class-time { flex-basis: 4.5rem; }
+  .fs-toolbar { flex-direction: column; align-items: stretch; }
+  .fs-toolbar .btn { width: 100%; }
+  .fs-card { padding: var(--space-4); }
+  .fs-card .btn { width: 100%; }
+}

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+  <meta name="theme-color" content="#9a3608">
+  <title>My Schedule | ATLAS PSU</title>
+  <link rel="stylesheet" href="../assets/css/main-style.css">
+  <link rel="stylesheet" href="../assets/css/faculty-style.css">
+  <script src="../assets/js/faculty-script.js" defer></script>
+  <script src="../assets/js/shared-ui.js" defer></script>
+</head>
+<body>
+
+  <!-- TOP NAVBAR -->
+  <nav class="top-navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-left">
+      <div class="nav-brand-wrap">
+        <img src="../assets/images/favicon.png" alt="Palawan State University Logo" class="psu-logo" width="36" height="36">
+        <span class="brand">ATLAS PSU</span>
+      </div>
+      <div class="nav-menu" role="menubar">
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="0">Dashboard</div>
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="1">Settings</div>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-item dropdown" aria-haspopup="true" aria-label="User menu">
+        <img src="https://media.istockphoto.com/id/2171382633/vector/user-profile-icon-anonymous-person-symbol-blank-avatar-graphic-vector-illustration.jpg?s=612x612&w=0&k=20&c=ZwOF6NfOR0zhYC44xOX06ryIPAUhDvAajrPsaZ6v1-w=" class="profile-pic" alt="User profile">
+        <div class="dropdown-content" role="menu">
+          <div role="menuitem" id="navUserLabel">Profile</div>
+          <a href="../pages/login.html" role="menuitem" data-logout>Logout</a>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-controls="navDrawer" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="nav-drawer-overlay" id="navDrawerOverlay"></div>
+  <aside class="nav-drawer" id="navDrawer" aria-label="Navigation menu" aria-hidden="true">
+    <div class="drawer-head">
+      <img src="../assets/images/favicon.png" alt="" width="32" height="32">
+      <span class="drawer-brand">ATLAS PSU</span>
+    </div>
+    <nav class="drawer-list">
+      <button type="button" class="drawer-item" data-go="0">Dashboard</button>
+      <button type="button" class="drawer-item" data-go="1">Settings</button>
+    </nav>
+    <div class="drawer-foot">
+      <div class="drawer-user">
+        <img src="https://media.istockphoto.com/id/2171382633/vector/user-profile-icon-anonymous-person-symbol-blank-avatar-graphic-vector-illustration.jpg?s=612x612&w=0&k=20&c=ZwOF6NfOR0zhYC44xOX06ryIPAUhDvAajrPsaZ6v1-w=" class="profile-pic" alt="User profile">
+        <span id="drawerUserLabel">Profile</span>
+      </div>
+      <a href="../pages/login.html" class="drawer-logout" data-logout>Logout</a>
+    </div>
+  </aside>
+
+  <main class="panels-wrapper">
+    <div class="panels-container">
+
+      <!-- PANEL 0: DASHBOARD -->
+      <section class="panel" id="panel-dashboard" aria-label="Dashboard">
+        <div class="dept-banner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01M15 10h.01"/></svg>
+          <div class="dept-banner-text">
+            <span class="dept-banner-label" id="fsBannerLabel">Your department</span>
+            <strong id="fsBannerName"></strong>
+          </div>
+        </div>
+
+        <div class="fs-alert" id="fsAlert" role="status" aria-live="polite" hidden>
+          <div class="fs-alert-text">
+            <strong id="fsAlertTitle"></strong>
+            <span id="fsAlertBody"></span>
+          </div>
+          <button type="button" class="fs-alert-close" id="fsAlertClose" aria-label="Dismiss reminder">&#10005;</button>
+        </div>
+
+        <div class="page-header">
+          <div>
+            <h2 id="fsGreeting">My Dashboard</h2>
+            <p>Your classes and the department schedule, kept in sync with the latest plan saved on this device.</p>
+          </div>
+          <div id="fsSemBadge" class="sem-context-badge" style="display:none;"></div>
+        </div>
+
+        <!-- Live clock + current / next class -->
+        <div class="fs-now">
+          <div class="fs-clock">
+            <div class="fs-clock-time" id="fsClock">--:--:--</div>
+            <div class="fs-clock-date" id="fsDate"></div>
+          </div>
+          <div class="fs-status" id="fsStatus">
+            <span class="fs-status-label" id="fsStatusLabel">Loading</span>
+            <strong class="fs-status-title" id="fsStatusTitle"></strong>
+            <span class="fs-status-meta" id="fsStatusMeta"></span>
+            <span class="fs-status-count" id="fsStatusCount"></span>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Classes This Week</div>
+            <div class="stat-value" id="fsStatClasses">0</div>
+            <div class="stat-sub">assigned to you</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Teaching Units</div>
+            <div class="stat-value" id="fsStatUnits">0</div>
+            <div class="stat-sub">total load</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Classes Today</div>
+            <div class="stat-value" id="fsStatToday">0</div>
+            <div class="stat-sub" id="fsStatTodaySub">&nbsp;</div>
+          </div>
+        </div>
+
+        <div class="fs-tabs" role="tablist" aria-label="Schedule views">
+          <button type="button" class="fs-tab active" role="tab" id="fsTabBtnMine" aria-selected="true" aria-controls="fsTabMine" data-tab="Mine">My Schedule</button>
+          <button type="button" class="fs-tab" role="tab" id="fsTabBtnWeek" aria-selected="false" aria-controls="fsTabWeek" data-tab="Week">My Week</button>
+          <button type="button" class="fs-tab" role="tab" id="fsTabBtnAll" aria-selected="false" aria-controls="fsTabAll" data-tab="All">All Faculty</button>
+        </div>
+
+        <!-- My Schedule -->
+        <div class="fs-tabpanel" id="fsTabMine" role="tabpanel" aria-labelledby="fsTabBtnMine">
+          <div id="fsMineList"></div>
+        </div>
+
+        <!-- My Week -->
+        <div class="fs-tabpanel" id="fsTabWeek" role="tabpanel" aria-labelledby="fsTabBtnWeek" hidden>
+          <button type="button" class="btn btn-full fs-view-btn" data-viewer-src="#fsWeekTimetable" data-viewer-title="My Week">View Schedule</button>
+          <div id="fsWeekTimetable" class="fs-week"></div>
+        </div>
+
+        <!-- All Faculty -->
+        <div class="fs-tabpanel" id="fsTabAll" role="tabpanel" aria-labelledby="fsTabBtnAll" hidden>
+          <div class="fs-toolbar">
+            <div class="fs-field">
+              <label for="fsFacultyFilter">Show faculty</label>
+              <select id="fsFacultyFilter"></select>
+            </div>
+            <button type="button" class="btn fs-view-all" data-viewer-src="#fsAllTimetable" data-viewer-title="Full Timetable">View Full Timetable</button>
+          </div>
+          <div id="fsAllList"></div>
+          <div id="fsAllTimetable" class="fs-hidden-source" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- PANEL 1: SETTINGS -->
+      <section class="panel" id="panel-settings" aria-label="Settings">
+        <div class="page-header">
+          <div>
+            <h2>Settings</h2>
+            <p>Manage your profile, class reminders and the schedule data used on this device.</p>
+          </div>
+        </div>
+
+        <div class="fs-card">
+          <h3>Profile</h3>
+          <div class="fs-form">
+            <div class="fs-field">
+              <label for="fsProfileFaculty">Faculty member</label>
+              <select id="fsProfileFaculty"></select>
+            </div>
+            <div class="fs-field">
+              <label for="fsProfileEmail">Corporate email</label>
+              <input type="text" id="fsProfileEmail" inputmode="email" autocomplete="username" placeholder="yourname@psu.palawan.edu.ph">
+            </div>
+            <div class="fs-field">
+              <label>Department</label>
+              <div class="fs-readonly" id="fsProfileDept"></div>
+            </div>
+          </div>
+          <div class="fs-error" id="fsProfileError" hidden></div>
+          <button type="button" class="btn" id="fsSaveProfile">Save Profile</button>
+        </div>
+
+        <div class="fs-card">
+          <h3>Class Reminders</h3>
+          <p class="fs-help">Reminders appear on this page while it is open. Keep the tab open on your phone or computer to be alerted.</p>
+          <label class="fs-switch"><input type="checkbox" id="fsSetEnabled"><span>Remind me before a class starts</span></label>
+          <div class="fs-field">
+            <label for="fsSetLead">Remind me</label>
+            <select id="fsSetLead">
+              <option value="5">5 minutes before</option>
+              <option value="10">10 minutes before</option>
+              <option value="15">15 minutes before</option>
+              <option value="30">30 minutes before</option>
+            </select>
+          </div>
+          <label class="fs-switch"><input type="checkbox" id="fsSetStart"><span>Also alert me when a class starts</span></label>
+          <label class="fs-switch"><input type="checkbox" id="fsSetSound"><span>Play a sound</span></label>
+          <label class="fs-switch"><input type="checkbox" id="fsSetVibrate"><span>Vibrate (supported phones)</span></label>
+          <label class="fs-switch"><input type="checkbox" id="fsSetBrowser"><span>Show system notifications</span></label>
+          <p class="fs-help" id="fsBrowserHelp"></p>
+          <button type="button" class="btn btn-outline" id="fsTestReminder">Send Test Reminder</button>
+        </div>
+
+        <div class="fs-card">
+          <h3>Schedule Data</h3>
+          <p class="fs-help" id="fsDataInfo"></p>
+          <button type="button" class="btn btn-outline" id="fsReloadData">Reload Schedule</button>
+        </div>
+
+        <div class="fs-card">
+          <h3>Account</h3>
+          <a href="../pages/login.html" class="btn btn-outline fs-logout" data-logout>Logout</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="toastNotif" class="toast-notif" aria-live="polite"></div>
+</body>
+</html>

@@ -3119,6 +3119,10 @@ window.switchPanel = switchPanel;
     window.location.href = 'login.html';
     return;
   }
+  if (window.location.pathname.includes('dashboard') && sessionStorage.getItem('atlasRole') === 'faculty') {
+    window.location.href = '../faculty/dashboard.html';
+    return;
+  }
 
   const navUserLabel = document.getElementById('navUserLabel');
   if (!navUserLabel) return; // not on dashboard
