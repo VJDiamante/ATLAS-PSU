@@ -1,7 +1,7 @@
 {
-  "name": "ATLAS PSU - Automated Teaching Load Assignment System",
+  "name": "ATLAS PSU: A Teaching Load Assignment and Management System for Department Chairpersons of the College of Sciences at Palawan State University",
   "short_name": "ATLAS PSU",
-  "description": "Faculty workload optimization and class schedules for Palawan State University.",
+  "description": "Teaching load assignment and management for the College of Sciences, Palawan State University.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

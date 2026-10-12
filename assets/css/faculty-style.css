@@ -128,3 +128,33 @@
   .fs-card { padding: var(--space-4); }
   .fs-card .btn { width: 100%; }
 }
+
+/* ---------- Week strip (day picker) ---------- */
+.fs-weekstrip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: var(--space-4); }
+.fs-day-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-height: 64px; padding: 6px 0; background: transparent; color: var(--text-primary);
+  border: 0; border-radius: var(--radius-lg); box-shadow: none; font-size: 1rem; font-weight: 700;
+}
+.fs-day-btn small { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.fs-day-btn:hover { background: var(--bg-surface-3); }
+.fs-day-btn.today small { color: var(--clr-primary-600); }
+.fs-day-btn.has-class::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--clr-primary-400); }
+.fs-day-btn:not(.has-class)::after { content: ""; width: 5px; height: 5px; }
+.fs-day-btn.selected { background: var(--clr-primary-600); color: #fff; }
+.fs-day-btn.selected small { color: rgba(255, 255, 255, 0.85); }
+.fs-day-btn.selected::after { background: #fff; }
+.fs-day-all { font-size: 0.8125rem; }
+
+@media (max-width: 768px) {
+  .fs-clock { padding: 0; background: transparent; border: 0; }
+  .fs-clock-time { font-size: 1.5rem; }
+  .fs-status, .fs-status-live { background: var(--clr-primary-600); border: 0; border-radius: var(--radius-xl); }
+  .fs-status-label, .fs-status-meta { color: rgba(255, 255, 255, 0.85); }
+  .fs-status-title { color: #fff; }
+  .fs-status-count, .fs-status-live .fs-status-count { color: #fff; font-size: 1.125rem; }
+  .fs-class { border: 0; background: var(--bg-surface-2); border-radius: var(--radius-lg); }
+  .fs-day-today .fs-class { border: 0; }
+  .fs-faculty { border: 0; background: var(--bg-surface-2); border-radius: var(--radius-xl); }
+  .fs-class-compact { background: var(--card-bg); }
+}

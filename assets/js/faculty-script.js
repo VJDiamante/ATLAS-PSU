@@ -129,7 +129,7 @@
   }
 
   /* ---------- State ---------- */
-  const state = { schedule: [], mine: [], names: [] };
+  const state = { schedule: [], mine: [], names: [], day: null };
 
   function reloadData() {
     state.schedule = loadSchedule();
@@ -243,7 +243,8 @@
       return;
     }
     const today = todayIndex(now);
-    host.innerHTML = DAYS.map((day, d) => {
+    const html = DAYS.map((day, d) => {
+      if (state.day !== null && state.day !== d) return '';
       const items = state.mine.filter(c => c.day === d);
       if (!items.length) return '';
       return `
@@ -252,6 +253,22 @@
           ${items.map(c => classCard(c, now)).join('')}
         </section>`;
     }).join('');
+    host.innerHTML = html || emptyState(state.day === null ? 'No classes assigned to you' : 'No classes on ' + DAY_NAMES[state.day]);
+  }
+
+  /* day picker: Mon-Sat of the current week plus "All" */
+  function renderWeekStrip(now) {
+    const today = todayIndex(now);
+    const buttons = DAYS.map((name, d) => {
+      const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - today + d);
+      const classes = ['fs-day-btn'];
+      if (d === today) classes.push('today');
+      if (state.day === d) classes.push('selected');
+      if (state.mine.some(c => c.day === d)) classes.push('has-class');
+      return `<button type="button" class="${classes.join(' ')}" data-day="${d}" aria-pressed="${state.day === d}"><small>${name}</small>${date.getDate()}</button>`;
+    });
+    buttons.push(`<button type="button" class="fs-day-btn fs-day-all${state.day === null ? ' selected' : ''}" data-day="all" aria-pressed="${state.day === null}"><small>Week</small>All</button>`);
+    $('fsWeekStrip').innerHTML = buttons.join('');
   }
 
   /* weekly timetable; entries optionally show the faculty name */
@@ -337,6 +354,7 @@
 
   function renderSchedules(now) {
     renderStats(now);
+    renderWeekStrip(now);
     renderMine(now);
     renderWeek(now);
     renderAll(now);
@@ -550,10 +568,20 @@
   initTabs();
   initSettings();
   $('fsAlertClose').addEventListener('click', hideAlert);
+  $('fsWeekStrip').addEventListener('click', e => {
+    const button = e.target.closest('.fs-day-btn');
+    if (!button) return;
+    state.day = button.dataset.day === 'all' ? null : Number(button.dataset.day);
+    const now = new Date();
+    renderWeekStrip(now);
+    renderMine(now);
+  });
   $('fsFacultyFilter').addEventListener('change', () => renderAll(new Date()));
   window.addEventListener('storage', e => { if (e.key === null || DATA_KEYS.includes(e.key)) refreshAll(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { const n = new Date(); renderStatus(n); checkReminders(n); } });
 
+  const startDay = todayIndex(new Date());
+  state.day = startDay <= 5 ? startDay : null;
   refreshAll();
 
   let lastMinute = -1;
@@ -564,6 +592,7 @@
     if (now.getMinutes() !== lastMinute) {          // re-mark "in progress" / "done" once a minute
       lastMinute = now.getMinutes();
       renderStats(now);
+      renderWeekStrip(now);
       renderMine(now);
       renderWeek(now);
     }

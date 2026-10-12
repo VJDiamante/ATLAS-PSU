@@ -1,7 +1,7 @@
 /* ============================================================
    ATLAS PSU - main-script.js
-   Automated Teaching Load Assignment System
-   Single universal script for index, login, and dashboard.
+   A Teaching Load Assignment and Management System for Department Chairpersons of the College of Sciences at Palawan State University
+   Chairperson dashboard logic (landing and login pages have their own scripts).
    ============================================================ */
 
 /* ── Auth guard (dashboard only, runs before DOMContentLoaded) ── */
@@ -202,26 +202,53 @@ let reportsChart    = null;
 let reportsBarChart = null;
 let miniDashChart   = null;
 
+/* Chart palette: ATLAS rust orange with its complement (teal) and warm neutrals */
+const THEME = {
+  ink: '#1a130e', muted: '#6e6358', grid: '#ece6df',
+  ok: '#2a7f86', warn: '#d9922b', bad: '#b4372b',
+  series: ['#9a3608', '#2a7f86', '#e8693a', '#5b6b7a', '#d9a066', '#7fb0b3', '#6e6358', '#c0440a', '#a7c4c6', '#e9c9a8']
+};
+
+function styleChartDefaults() {
+  const d = Chart.defaults;
+  d.font.family = "'DM Sans', system-ui, sans-serif";
+  d.font.size = 12;
+  d.color = THEME.muted;
+  d.plugins.legend.labels.usePointStyle = true;
+  d.plugins.legend.labels.pointStyle = 'circle';
+  d.plugins.legend.labels.boxWidth = 8;
+  d.plugins.legend.labels.boxHeight = 8;
+  d.plugins.legend.labels.padding = 16;
+  Object.assign(d.plugins.tooltip, {
+    backgroundColor: THEME.ink, titleColor: '#fffefb', bodyColor: '#fffefb',
+    padding: 10, cornerRadius: 8, boxPadding: 4, displayColors: false
+  });
+}
+
 function initCharts() {
+  styleChartDefaults();
   // Dashboard bar chart
   const ctxDash = document.getElementById('dashboardChart');
   if (ctxDash) {
     dashboardChart = new Chart(ctxDash, {
       type: 'bar',
-      data: { labels: [], datasets: [{ label: 'Units per Faculty', data: [], backgroundColor: [] }] },
+      data: { labels: [], datasets: [{ label: 'Units per Faculty', data: [], backgroundColor: [], borderRadius: 8, borderSkipped: false, maxBarThickness: 40 }] },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } },
+        scales: {
+          y: { beginAtZero: true, border: { display: false }, grid: { color: THEME.grid }, ticks: { padding: 8, precision: 0 } },
+          x: { border: { display: false }, grid: { display: false } }
+        },
         plugins: {
           legend: {
             display: true,
             position: 'top',
             labels: {
               generateLabels: () => [
-                { text: 'Normal',         fillStyle: '#88E788' },
-                { text: 'Max Load',       fillStyle: '#FF6700' },
-                { text: 'Over/Under Load',fillStyle: '#FF0000' }
+                { text: 'Normal',          fillStyle: THEME.ok,   strokeStyle: THEME.ok,   pointStyle: 'circle' },
+                { text: 'Max Load',        fillStyle: THEME.warn, strokeStyle: THEME.warn, pointStyle: 'circle' },
+                { text: 'Over/Under Load', fillStyle: THEME.bad,  strokeStyle: THEME.bad,  pointStyle: 'circle' }
               ]
             },
             onClick: (e, legendItem, legend) => {
@@ -232,7 +259,7 @@ function initCharts() {
                 label, value: ds.data[i], color: ds.backgroundColor[i]
               }));
               if (!chart.sortOrder) chart.sortOrder = 'asc';
-              const orderMap = { '#88E788': 0, '#FF6700': 1, '#FF0000': 2 };
+              const orderMap = { [THEME.ok]: 0, [THEME.warn]: 1, [THEME.bad]: 2 };
               combined.sort((a, b) => {
                 if (a.color === selColor) return -1;
                 if (b.color === selColor) return 1;
@@ -263,20 +290,23 @@ function initCharts() {
   const ctxPie = document.getElementById('reportsChart');
   if (ctxPie) {
     reportsChart = new Chart(ctxPie, {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         labels: [],
         datasets: [{
           data: [],
-          backgroundColor: ['#7ED6DF','#F0932B','#EB4D4B','#6AB04C','#BE2EDD',
-                            '#22A6B3','#F9CA24','#BADC58','#E056FD','#FF7979',
-                            '#badc58','#f9ca24','#6ab04c','#22a6b3']
+          backgroundColor: THEME.series,
+          borderColor: '#ffffff',
+          borderWidth: 3,
+          hoverOffset: 6
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        cutout: '64%',
         plugins: {
+          legend: { position: window.innerWidth < 768 ? 'bottom' : 'right' },
           tooltip: {
             callbacks: {
               label: ctx => {
@@ -297,13 +327,16 @@ function initCharts() {
   if (ctxBar) {
     reportsBarChart = new Chart(ctxBar, {
       type: 'bar',
-      data: { labels: [], datasets: [{ label: 'Total Teaching Units', data: [], backgroundColor: [] }] },
+      data: { labels: [], datasets: [{ label: 'Total Teaching Units', data: [], backgroundColor: [], borderRadius: 6, borderSkipped: false, barThickness: 18 }] },
       options: {
         indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { ticks: { autoSkip: false } } }
+        scales: {
+          x: { beginAtZero: true, border: { display: false }, grid: { color: THEME.grid }, ticks: { precision: 0 } },
+          y: { border: { display: false }, grid: { display: false }, ticks: { autoSkip: false } }
+        }
       }
     });
   }
@@ -313,7 +346,7 @@ function initCharts() {
   if (ctxMini) {
     miniDashChart = new Chart(ctxMini, {
       type: 'bar',
-      data: { labels: [], datasets: [{ label: 'Load', data: [], backgroundColor: [] }] },
+      data: { labels: [], datasets: [{ label: 'Load', data: [], backgroundColor: [], borderRadius: 3, borderSkipped: false }] },
       options: {
         responsive: false,
         animation: { duration: 150 },
@@ -368,17 +401,14 @@ function switchPanel(index) {
    4. COLOR HELPERS
    ============================================================ */
 function getLoadColor(value, max = MAX_UNITS) {
-  if (value > max) return '#FF0000';
-  if (value === max) return '#FF6700';
-  if (value <= 2) return '#FF0000';
-  return '#88E788';
+  if (value > max) return THEME.bad;
+  if (value === max) return THEME.warn;
+  if (value <= 2) return THEME.bad;
+  return THEME.ok;
 }
 
-function getProgressColor(percent) {
-  if (percent <= 50) {
-    return `rgb(255, ${Math.floor(255 * (percent / 50))}, 0)`;
-  }
-  return `rgb(${Math.floor(255 * ((100 - percent) / 50))}, 255, 0)`;
+function getProgressColor() {
+  return '#c0440a';
 }
 
 /* ============================================================
