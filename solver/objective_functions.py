@@ -70,7 +70,7 @@ def score_preference(assignment: dict, soft_constraints: dict,
         if sc.get("maternity_leave"):
             score += w["maternity_leave_penalty"]
 
-        # Date-based unavailability / leave ranges (soft penalty — discourages
+        # Date-based unavailability / leave ranges (soft penalty - discourages
         # but does not hard-block, since slots are recurring weekly patterns
         # without concrete calendar dates).
         if sc.get("unavailable_dates") or sc.get("leave_dates"):

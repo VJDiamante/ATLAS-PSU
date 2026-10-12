@@ -27,7 +27,7 @@ const DAY_MAP = {
 
 const DAY_ORDER = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5 };
 
-// MAX_UNITS is now dynamic — read from Settings (localStorage), default 24
+// MAX_UNITS is now dynamic - read from Settings (localStorage), default 24
 function getMaxUnits() {
   try {
     const s = JSON.parse(localStorage.getItem('systemSettings') || '{}');
@@ -37,7 +37,7 @@ function getMaxUnits() {
 // Keep a live reference updated on each access
 Object.defineProperty(window, 'MAX_UNITS', { get: getMaxUnits });
 
-// UNITS_PER_ASSIGNMENT — dynamic, read from Settings (localStorage), default 2
+// UNITS_PER_ASSIGNMENT - dynamic, read from Settings (localStorage), default 2
 function getUnitsPerAssignment() {
   try {
     const s = JSON.parse(localStorage.getItem('systemSettings') || '{}');
@@ -79,7 +79,7 @@ const LECTURE_ROOMS = [
 
 const LABORATORY_ROOMS = ['MTC1','MTC2','IT101','NIT1','NIT3'];
 
-// Room capacity defaults — mirrors backend config/settings.py ROOM_CAPACITY
+// Room capacity defaults - mirrors backend config/settings.py ROOM_CAPACITY
 const DEFAULT_ROOM_CAPACITY = {
   'CL1':       { recommended: 35, max: 52 },
   'CL2':       { recommended: 35, max: 52 },
@@ -465,7 +465,7 @@ function renderCapacityMetrics(capacityMetrics) {
   const warnCt = capacityMetrics.over_recommended_count   || 0;
   const hardCt = capacityMetrics.hard_violation_count     || 0;
 
-  const pct = n => total > 0 ? ((n / total) * 100).toFixed(1) + '%' : '–';
+  const pct = n => total > 0 ? ((n / total) * 100).toFixed(1) + '%' : '-';
 
   document.getElementById('capMetricTotal').textContent   = total;
   document.getElementById('capMetricOk').textContent      = okCnt;
@@ -521,11 +521,11 @@ function renderTimetable(data) {
 
   const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const SLOT_DEFS = [
-    { label: '7–9',   startH: 7,  endH: 9  },
-    { label: '9–11',  startH: 9,  endH: 11 },
-    { label: '13–15', startH: 13, endH: 15 },
-    { label: '15–17', startH: 15, endH: 17 },
-    { label: '17–19', startH: 17, endH: 19 },
+    { label: '7-9',   startH: 7,  endH: 9  },
+    { label: '9-11',  startH: 9,  endH: 11 },
+    { label: '13-15', startH: 13, endH: 15 },
+    { label: '15-17', startH: 15, endH: 17 },
+    { label: '17-19', startH: 17, endH: 19 },
   ];
 
   // Build lookup keyed by "Day-startH-endH"
@@ -599,7 +599,7 @@ function updateReportsPanel(data) {
     byFaculty[item.faculty].push(item);
   });
 
-  // Find the legacy table wrapper — we replace its parent or insert sibling
+  // Find the legacy table wrapper - we replace its parent or insert sibling
   const legacyTable = document.getElementById('reportsSummaryTable');
   if (!legacyTable) return;
 
@@ -651,9 +651,9 @@ function updateReportsPanel(data) {
             <span class="class-type-tag ${ctClass}">${escapeHTML(item.class_type || 'LECTURE')}</span>
             ${sectionTag}
           </td>
-          <td>${displaySlot ? `<span class="slot-badge slot-${escapeHTML(day)}">${escapeHTML(displaySlot)}</span>` : '<span class="text-muted">—</span>'}</td>
+          <td>${displaySlot ? `<span class="slot-badge slot-${escapeHTML(day)}">${escapeHTML(displaySlot)}</span>` : '<span class="text-muted">-</span>'}</td>
           <td>
-            ${item.room ? `<span class="room-badge">${escapeHTML(item.room)}</span>` : '<span class="text-muted">—</span>'}
+            ${item.room ? `<span class="room-badge">${escapeHTML(item.room)}</span>` : '<span class="text-muted">-</span>'}
             ${stuTag}
             ${capBadge}
           </td>
@@ -867,7 +867,7 @@ function renderTable(data) {
       <td><span class="class-type-tag ${(item.class_type||'LECTURE').toLowerCase()}">${escapeHTML(item.class_type || 'LECTURE')}</span></td>
       <td>${escapeHTML(displaySlot)}</td>
       <td>${item.room ? `<span class="room-badge"> ${escapeHTML(item.room)}</span>` : '<span class="text-muted">N/A</span>'}</td>
-      <td>${item.student_count > 0 ? `<span class="student-count-tag">${item.student_count}</span>` : '<span class="text-muted">—</span>'}</td>
+      <td>${item.student_count > 0 ? `<span class="student-count-tag">${item.student_count}</span>` : '<span class="text-muted">-</span>'}</td>
       <td>${buildCapacityBadge(item)}</td>
     `;
     tbody.appendChild(tr);
@@ -1324,7 +1324,7 @@ function initEditFacultyModal() {
     const opts = rooms.map(r =>
       `<option value="${escapeAttr(r)}" ${selected === r ? 'selected' : ''}>${escapeHTML(r)}</option>`
     ).join('');
-    return `<option value="">— Room —</option>${opts}`;
+    return `<option value="">Select room</option>${opts}`;
   }
 
   function buildSubjectOptions(selected) {
@@ -1332,7 +1332,7 @@ function initEditFacultyModal() {
     const opts = subjects.map(s =>
       `<option value="${escapeAttr(s.name)}" ${selected === s.name ? 'selected' : ''}>${escapeHTML(s.name)}</option>`
     ).join('');
-    return `<option value="">— Subject —</option>${opts}`;
+    return `<option value="">Select subject</option>${opts}`;
   }
 
   function addAssignmentRow(item = {}) {
@@ -1427,7 +1427,7 @@ function initEditFacultyModal() {
                 parseInt(daySlotMatch[2]) >= 12
                   ? `${parseInt(daySlotMatch[2]) - 12 || 12}:00 PM`
                   : `${parseInt(daySlotMatch[2])}:00 AM`
-              } – ${
+              } - ${
                 parseInt(daySlotMatch[3]) >= 12
                   ? `${parseInt(daySlotMatch[3]) - 12 || 12}:00 PM`
                   : `${parseInt(daySlotMatch[3])}:00 AM`
@@ -1460,7 +1460,7 @@ function initEditFacultyModal() {
       }
 
       closeModal();
-      showToast(`${name} — updated successfully.`, 'success');
+      showToast(`${name} updated successfully.`, 'success');
     });
   }
 }
@@ -2136,7 +2136,7 @@ function generatePrintReport() {
       <div class="fairness-item">
         <div class="f-label">Jain's Index</div>
         <div class="f-value">${fJain}</div>
-        <div class="f-sub">Equality metric (0–1)</div>
+        <div class="f-sub">Equality metric (0-1)</div>
       </div>
       <div class="fairness-item">
         <div class="f-label">Specialization Match</div>
@@ -2460,7 +2460,7 @@ function initAcademicMode() {
     const year     = yearInput.value.trim();
     const semester = semSel.value;
     if (!year) {
-      showToast('Please enter an Academic Year (e.g. 2024–2025).', 'info');
+      showToast('Please enter an Academic Year (e.g. 2024-2025).', 'info');
       yearInput.focus();
       return;
     }
@@ -3045,15 +3045,15 @@ function renderCapacityAnalytics(analytics) {
   const okCnt  = cm.within_recommended_count || 0;
   const warnCt = cm.over_recommended_count   || 0;
   const hardCt = cm.hard_violation_count     || 0;
-  const pct = n => total > 0 ? ((n / total) * 100).toFixed(1) + '%' : '–';
+  const pct = n => total > 0 ? ((n / total) * 100).toFixed(1) + '%' : '-';
 
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  set('analyticsCapTotal',          total  != null ? total  : '–');
-  set('analyticsCapCompliant',      okCnt  != null ? okCnt  : '–');
+  set('analyticsCapTotal',          total  != null ? total  : '-');
+  set('analyticsCapCompliant',      okCnt  != null ? okCnt  : '-');
   set('analyticsCapCompliantPct',   pct(okCnt));
-  set('analyticsCapOver',           warnCt != null ? warnCt : '–');
+  set('analyticsCapOver',           warnCt != null ? warnCt : '-');
   set('analyticsCapOverPct',        pct(warnCt));
-  set('analyticsCapViolations',     hardCt != null ? hardCt : '–');
+  set('analyticsCapViolations',     hardCt != null ? hardCt : '-');
   set('analyticsCapViolationsPct',  pct(hardCt));
 
   // Room utilization table
@@ -3085,7 +3085,7 @@ function renderCapacityAnalytics(analytics) {
       const badgeLabel = d.status === 'hard_violation' ? 'Violation' : d.status === 'over_recommended' ? 'Over Cap' : 'OK';
       return `<tr>
         <td><span class="room-badge">${escapeHTML(d.room)}</span></td>
-        <td>${d.section ? `<span class="section-badge">${escapeHTML(d.section)}</span>` : '<span class="text-muted">—</span>'}</td>
+        <td>${d.section ? `<span class="section-badge">${escapeHTML(d.section)}</span>` : '<span class="text-muted">-</span>'}</td>
         <td>${escapeHTML(d.subject || '')}</td>
         <td class="txt-center"><span class="student-count-tag">${d.student_count}</span></td>
         <td class="txt-center">${d.recommended_cap}</td>
@@ -3111,10 +3111,10 @@ function showToast(msg, type = 'info') {
 
 window.switchPanel = switchPanel;
 /* ============================================================
-   DASHBOARD PAGE — dashboard.html inline script (migrated)
+   DASHBOARD PAGE - dashboard.html inline script (migrated)
    ============================================================ */
 (function initDashboardPage() {
-  // Auth guard — runs after defer, DOM is available
+  // Auth guard - runs after defer, DOM is available
   if (window.location.pathname.includes('dashboard') && !sessionStorage.getItem('atlasUser')) {
     window.location.href = 'login.html';
     return;
@@ -3140,7 +3140,7 @@ window.switchPanel = switchPanel;
     const lbl  = document.getElementById('navUserLabel');
     if (lbl && user) lbl.textContent = user + (dept ? ' · ' + (deptMap[dept] || dept) : '');
 
-    // Profile dropdown — click to open/close
+    // Profile dropdown - click to open/close
     const profileDrop = document.querySelector('.nav-item.dropdown');
     if (profileDrop) {
       profileDrop.addEventListener('click', e => {

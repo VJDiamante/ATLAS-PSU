@@ -197,7 +197,7 @@ def run_scheduling_job(
         if unassigned:
             warnings.append(f"{unassigned} section(s) could not be assigned to any faculty.")
         if cp_metrics.get("solver_used") == "cp_backtracking":
-            warnings.append("OR-Tools not available — used backtracking solver.")
+            warnings.append("OR-Tools not available - used backtracking solver.")
 
         # Capacity warnings from analytics
         cap_analytics = analytics.get("capacity_metrics", {})

@@ -62,7 +62,7 @@
   }
 
   function formatRange(c) {
-    return `${formatHour(c.startH)} – ${formatHour(c.endH)}`;
+    return `${formatHour(c.startH)} - ${formatHour(c.endH)}`;
   }
 
   /* minutes since Monday 00:00 for a Date (Sunday counts as day 6) */
@@ -183,7 +183,6 @@
     $('fsGreeting').textContent = 'Welcome, ' + session.name;
     const short = session.dept ? ' \u00b7 ' + session.dept : '';
     $('navUserLabel').textContent = session.name + short;
-    $('drawerUserLabel').textContent = session.name + short;
 
     const mode = readJSON(localStorage, 'academicMode', null);
     const badge = $('fsSemBadge');
@@ -234,13 +233,13 @@
     return `<div class="fs-empty">${text}</div>`;
   }
 
-  const NO_DATA = 'No schedule is saved on this device yet. Ask your department chairperson to run the optimization from this browser.';
+  const NO_DATA = 'No schedule on this device yet';
 
   function renderMine(now) {
     const host = $('fsMineList');
     if (!state.mine.length) {
       host.innerHTML = emptyState(state.schedule.length
-        ? 'No classes are assigned to you in the current schedule.' : NO_DATA);
+        ? 'No classes assigned to you' : NO_DATA);
       return;
     }
     const today = todayIndex(now);
@@ -262,7 +261,7 @@
     DAYS.forEach(d => { html += `<th class="tt-day-col tt-hd-${d}">${d}</th>`; });
     html += '</tr></thead><tbody>';
     SLOT_ROWS.forEach(([startH, endH]) => {
-      html += `<tr><td class="tt-time-label">${startH}–${endH}</td>`;
+      html += `<tr><td class="tt-time-label">${startH}-${endH}</td>`;
       DAYS.forEach((day, d) => {
         const entries = items.filter(c => c.day === d && c.startH === startH && c.endH === endH);
         if (!entries.length) { html += '<td class="tt-cell tt-empty"></td>'; return; }
@@ -287,7 +286,7 @@
   function renderWeek(now) {
     $('fsWeekTimetable').innerHTML = state.mine.length
       ? timetableHTML(state.mine, false, now) : emptyState(state.schedule.length
-        ? 'No classes are assigned to you in the current schedule.' : NO_DATA);
+        ? 'No classes assigned to you' : NO_DATA);
   }
 
   function renderAll(now) {
@@ -304,7 +303,7 @@
     $('fsAllTimetable').innerHTML = timetableHTML(visible, true, now);
 
     if (!names.length) {
-      $('fsAllList').innerHTML = emptyState(state.schedule.length ? 'No classes found for this selection.' : NO_DATA);
+      $('fsAllList').innerHTML = emptyState(state.schedule.length ? 'No classes found' : NO_DATA);
       return;
     }
     const openAll = !isMobile();
@@ -378,7 +377,7 @@
       count.textContent = 'Starts in ' + formatDuration(wait);
     } else {
       label.textContent = 'No classes';
-      title.textContent = state.schedule.length ? 'Nothing assigned to you yet' : 'No schedule saved on this device';
+      title.textContent = state.schedule.length ? 'Nothing assigned yet' : 'No schedule on this device';
       meta.textContent = '';
       count.textContent = '';
     }
@@ -458,10 +457,10 @@
 
   /* ---------- Settings panel ---------- */
   function browserHelp() {
-    if (!('Notification' in window)) return 'System notifications are not supported by this browser.';
-    if (Notification.permission === 'denied') return 'System notifications are blocked. Allow them in your browser site settings.';
-    if (Notification.permission === 'granted') return 'System notifications are allowed.';
-    return 'Your browser will ask for permission when you turn this on.';
+    if (!('Notification' in window)) return 'Not supported by this browser';
+    if (Notification.permission === 'denied') return 'Blocked in browser settings';
+    if (Notification.permission === 'granted') return 'Allowed';
+    return 'Asks permission when turned on';
   }
 
   function renderSettings() {
@@ -484,7 +483,7 @@
 
   function renderDataInfo() {
     $('fsDataInfo').textContent = state.schedule.length
-      ? `${state.schedule.length} classes from ${new Set(state.schedule.map(c => c.faculty)).size} faculty members are loaded from this device.`
+      ? `${state.schedule.length} classes \u00b7 ${new Set(state.schedule.map(c => c.faculty)).size} faculty`
       : NO_DATA;
   }
 

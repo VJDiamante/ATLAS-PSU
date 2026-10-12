@@ -45,7 +45,7 @@ ROOM_CAPACITY = {
     "GA Bldg 24": {"recommended": 40, "max": 55},
     "GA Bldg 25": {"recommended": 40, "max": 55},
 
-    # MTC1-MTC2: Computer cubicle lab — hard max 45, reject >45
+    # MTC1-MTC2: Computer cubicle lab - hard max 45, reject >45
     # Tiers: <=32 comfortable, 33-40 moderate penalty, 41-45 higher penalty
     "MTC1": {"recommended": 32, "max": 45,
               "tiers": [(33, 2.0), (41, 5.0)]},  # per-student penalty per tier start

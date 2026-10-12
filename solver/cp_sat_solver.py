@@ -77,7 +77,7 @@ def _assign_room(class_type: str, slot: str, room_slot_used: set,
     Assign best-fit room for the given class type and slot.
 
     Priority order:
-      1. Hard cap respected (student_count <= room max) — for lectures.
+      1. Hard cap respected (student_count <= room max) - for lectures.
          For labs where ALL rooms exceed hard max, falls back to smallest-excess
          room so analytics can flag it for batch-splitting.
       2. Capacity fit (tightest recommended >= student_count).
@@ -92,7 +92,7 @@ def _assign_room(class_type: str, slot: str, room_slot_used: set,
     free_pool = [r for r in pool if f"{r}|{slot}" not in room_slot_used]
 
     if not free_pool:
-        # All rooms occupied — still return best guess (shouldn't normally happen)
+        # All rooms occupied - still return best guess (shouldn't normally happen)
         candidates = list(pool)
     else:
         if student_count > 0:
@@ -100,7 +100,7 @@ def _assign_room(class_type: str, slot: str, room_slot_used: set,
             if cap_ok:
                 candidates = cap_ok
             else:
-                # All rooms over hard max — assign anyway (lab batch-split use case)
+                # All rooms over hard max - assign anyway (lab batch-split use case)
                 # Sort by smallest excess over max so analytics flags correctly
                 candidates = sorted(
                     free_pool,
@@ -237,7 +237,7 @@ def _solve_with_ortools(sections: list, faculty_list: list, static_lookup: dict,
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return None
 
-    # Extract solution — use capacity-aware room assignment
+    # Extract solution - use capacity-aware room assignment
     room_slot_used: set = set()
     room_usage: dict = {}
     fac_day_building: dict = {}
@@ -293,7 +293,7 @@ def _solve_with_backtracking(sections: list, faculty_list: list, static_lookup: 
     fac_map = {f["name"]: f for f in faculty_list}
     start_time = time.time()
 
-    # Build eligible (faculty, slot) pairs per section — prune early
+    # Build eligible (faculty, slot) pairs per section - prune early
     def eligibles(sec):
         result = []
         for fac in faculty_list:
@@ -322,7 +322,7 @@ def _solve_with_backtracking(sections: list, faculty_list: list, static_lookup: 
         if idx == len(section_eligibles):
             return True
         if time.time() - start_time > time_limit * 0.8:
-            return True  # soft timeout — accept partial
+            return True  # soft timeout - accept partial
 
         sec, options = section_eligibles[idx]
 
@@ -443,7 +443,7 @@ def _solve_with_backtracking(sections: list, faculty_list: list, static_lookup: 
                 if not remaining_sec_bld and section_day_building.get((_sec_key, day)) == bld:
                     del section_day_building[(_sec_key, day)]
 
-        # No valid assignment found — insert unassigned placeholder and continue
+        # No valid assignment found - insert unassigned placeholder and continue
         result.append({
             "faculty":       "",
             "subject":       sec["name"],
@@ -520,7 +520,7 @@ def _repair_unassigned(assignments: list, faculty_list: list, static_lookup: dic
                     chosen_slot = s
                     break
 
-        # Room — capacity-aware, usage-balanced, building-affinity-aware
+        # Room - capacity-aware, usage-balanced, building-affinity-aware
         class_type = a.get("class_type", "LECTURE")
         student_count = a.get("student_count", 0)
         free_rooms = [r for r in _room_pool(class_type) if f"{r}|{chosen_slot}" not in room_slot_used]

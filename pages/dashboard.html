@@ -39,11 +39,11 @@
         <span class="brand">ATLAS PSU</span>
       </div>
       <div class="nav-menu" role="menubar">
-        <div class="nav-item" role="menuitem" tabindex="0" data-panel="0">Dashboard</div>
-        <div class="nav-item" role="menuitem" tabindex="0" data-panel="1">Workload Optimization</div>
-        <div class="nav-item" role="menuitem" tabindex="0" data-panel="2">Reports</div>
-        <div class="nav-item" role="menuitem" tabindex="0" data-panel="3">Faculty &amp; Subjects</div>
-        <div class="nav-item" role="menuitem" tabindex="0" data-panel="4">Settings</div>
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="0"><svg class="nav-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Dashboard</span></div>
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="1"><svg class="nav-ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Workload Optimization</span></div>
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="2"><svg class="nav-ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Reports</span></div>
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="3"><svg class="nav-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Faculty &amp; Subjects</span></div>
+        <div class="nav-item" role="menuitem" tabindex="0" data-panel="4"><svg class="nav-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></div>
       </div>
     </div>
 
@@ -60,30 +60,7 @@
         </div>
       </div>
     </div>
-    <button type="button" class="nav-hamburger" id="navHamburger" aria-label="Open menu" aria-controls="navDrawer" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
-
-  <div class="nav-drawer-overlay" id="navDrawerOverlay"></div>
-  <aside class="nav-drawer" id="navDrawer" aria-label="Navigation menu" aria-hidden="true">
-    <div class="drawer-head">
-      <img src="../assets/images/favicon.png" alt="" width="32" height="32">
-      <span class="drawer-brand">ATLAS PSU</span>
-    </div>
-    <nav class="drawer-list">
-      <button type="button" class="drawer-item" data-go="0">Dashboard</button>
-      <button type="button" class="drawer-item" data-go="1">Workload Optimization</button>
-      <button type="button" class="drawer-item" data-go="2">Reports</button>
-      <button type="button" class="drawer-item" data-go="3">Faculty &amp; Subjects</button>
-      <button type="button" class="drawer-item" data-go="4">Settings</button>
-    </nav>
-    <div class="drawer-foot">
-      <div class="drawer-user">
-        <img src="https://media.istockphoto.com/id/2171382633/vector/user-profile-icon-anonymous-person-symbol-blank-avatar-graphic-vector-illustration.jpg?s=612x612&w=0&k=20&c=ZwOF6NfOR0zhYC44xOX06ryIPAUhDvAajrPsaZ6v1-w=" class="profile-pic" alt="User profile">
-        <span id="drawerUserLabel">Profile</span>
-      </div>
-      <a href="login.html" class="drawer-logout" onclick="sessionStorage.clear()">Logout</a>
-    </div>
-  </aside>
 
   <!-- ========================================================
        PANELS WRAPPER
@@ -102,8 +79,7 @@
         </div>
         <div class="page-header">
           <div>
-            <h2>Faculty Optimization Dashboard</h2>
-            <p>Real-time academic workload analytics and faculty distribution insights supported by CP-SAT and genetic algorithm optimization.</p>
+            <h2><svg class="title-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Dashboard</h2>
           </div>
           <div id="dashboardSemContext" class="sem-context-badge" style="display:none;"></div>
         </div>
@@ -132,11 +108,10 @@
           <div class="dashboard-card-header">
             <div>
               <h3>Subject Assignments by Faculty</h3>
-              <p class="dashboard-card-sub">Current schedule: faculty workload and assigned subjects per section</p>
             </div>
           </div>
           <div id="dashboardFacultyAssignments" class="faculty-assignments-container">
-            <p class="empty-state-msg">Run the optimization to see faculty-subject assignments.</p>
+            <p class="empty-state-msg">No results yet</p>
           </div>
         </div>
 
@@ -144,34 +119,33 @@
           <div class="dashboard-card-header">
             <div>
               <h3>Room Capacity Overview</h3>
-              <p class="dashboard-card-sub">Student-to-room fit analysis across all scheduled assignments</p>
             </div>
             <div id="capacityOverallBadge" class="capacity-overall-badge"></div>
           </div>
           <div class="capacity-metrics-grid">
             <div class="capacity-metric-tile capacity-ok">
-              <div class="capacity-metric-value" id="capMetricOk">–</div>
+              <div class="capacity-metric-value" id="capMetricOk">-</div>
               <div class="capacity-metric-label">Within Recommended</div>
               <div class="capacity-metric-pct" id="capMetricOkPct"></div>
             </div>
             <div class="capacity-metric-tile capacity-warn">
-              <div class="capacity-metric-value" id="capMetricWarn">–</div>
+              <div class="capacity-metric-value" id="capMetricWarn">-</div>
               <div class="capacity-metric-label">Over Recommended</div>
               <div class="capacity-metric-pct" id="capMetricWarnPct"></div>
             </div>
             <div class="capacity-metric-tile capacity-hard">
-              <div class="capacity-metric-value" id="capMetricHard">–</div>
+              <div class="capacity-metric-value" id="capMetricHard">-</div>
               <div class="capacity-metric-label">Hard Violations</div>
               <div class="capacity-metric-pct" id="capMetricHardPct"></div>
             </div>
             <div class="capacity-metric-tile capacity-total">
-              <div class="capacity-metric-value" id="capMetricTotal">–</div>
+              <div class="capacity-metric-value" id="capMetricTotal">-</div>
               <div class="capacity-metric-label">Total Evaluated</div>
               <div class="capacity-metric-pct">assignments</div>
             </div>
           </div>
           <div id="capacityHardViolationsList" class="capacity-violations-list" style="display:none;">
-            <div class="capacity-violations-header">⚠ Hard Capacity Violations</div>
+            <div class="capacity-violations-header">Hard Capacity Violations</div>
             <div id="capacityHardViolationsItems"></div>
           </div>
         </div>
@@ -180,8 +154,7 @@
         <div class="dashboard-chart-card dashboard-chart-secondary">
           <div class="dashboard-card-header">
             <div>
-              <h3>Faculty Load Distribution</h3>
-              <p class="dashboard-card-sub">Unit totals for each faculty member (sort by load status by clicking the legend)</p>
+              <h3>Faculty Load Distribution<span class="info-tip" tabindex="0" role="note" aria-label="Tap a legend item to sort by load status" data-tip="Tap a legend item to sort by load status">i</span></h3>
             </div>
           </div>
           <div class="chart-canvas-wrap">
@@ -194,8 +167,7 @@
       <section class="panel" aria-label="Workload Optimization">
         <div class="page-header">
           <div>
-            <h2>Workload Optimization Engine</h2>
-            <p>Generate balanced faculty schedules using adaptive genetic optimization with real-time progress display.</p>
+            <h2><svg class="title-ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Workload Optimization</h2>
           </div>
           <div id="optimizationSemContext" class="sem-context-badge" style="display:none;"></div>
         </div>
@@ -212,7 +184,7 @@
           </button>
 
           <button class="btn btn-outline btn-full btn-advanced-settings" id="goToAdvancedSettings" onclick="switchPanel(4); const p=document.querySelectorAll('.panel')[4]; if(p) p.scrollTop=0;">
-            ⚙ Advanced Settings
+            Advanced Settings
           </button>
         </div>
 
@@ -264,8 +236,7 @@
       <section class="panel" id="reportsPanel" aria-label="Faculty Analytics and Reports">
         <div class="page-header">
           <div>
-            <h2>Faculty Analytics &amp; Reports</h2>
-            <p>Visual task distribution, scheduling analytics, and export-ready institutional summaries.</p>
+            <h2><svg class="title-ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reports</h2>
           </div>
           <div id="reportsSemContext" class="sem-context-badge" style="display:none;"></div>
         </div>
@@ -289,7 +260,7 @@
           <h3>Subject Assignments by Faculty &amp; Time</h3>
           <button type="button" class="btn btn-full tt-view-btn" id="viewScheduleBtn" data-viewer-src="#facultyTimetableContainer" data-viewer-title="Schedule">View Schedule</button>
           <div id="facultyTimetableContainer" class="timetable-outer">
-            <p class="empty-state-msg">Run the optimization to see the schedule timetable.</p>
+            <p class="empty-state-msg">No results yet</p>
           </div>
         </div>
 
@@ -323,22 +294,22 @@
         <h3 class="section-heading">Room Capacity Analytics</h3>
         <div class="capacity-metrics-grid" id="analyticsCapMetricsGrid" style="margin-bottom:var(--space-5);">
           <div class="capacity-metric-tile capacity-ok">
-            <div class="capacity-metric-value" id="analyticsCapCompliant">–</div>
+            <div class="capacity-metric-value" id="analyticsCapCompliant">-</div>
             <div class="capacity-metric-label">Within Recommended</div>
             <div class="capacity-metric-pct" id="analyticsCapCompliantPct"></div>
           </div>
           <div class="capacity-metric-tile capacity-warn">
-            <div class="capacity-metric-value" id="analyticsCapOver">–</div>
+            <div class="capacity-metric-value" id="analyticsCapOver">-</div>
             <div class="capacity-metric-label">Over Recommended</div>
             <div class="capacity-metric-pct" id="analyticsCapOverPct"></div>
           </div>
           <div class="capacity-metric-tile capacity-hard">
-            <div class="capacity-metric-value" id="analyticsCapViolations">–</div>
+            <div class="capacity-metric-value" id="analyticsCapViolations">-</div>
             <div class="capacity-metric-label">Hard Violations</div>
             <div class="capacity-metric-pct" id="analyticsCapViolationsPct"></div>
           </div>
           <div class="capacity-metric-tile capacity-total">
-            <div class="capacity-metric-value" id="analyticsCapTotal">–</div>
+            <div class="capacity-metric-value" id="analyticsCapTotal">-</div>
             <div class="capacity-metric-label">Total Evaluated</div>
             <div class="capacity-metric-pct">assignments</div>
           </div>
@@ -384,8 +355,8 @@
       <!-- PANEL 3: FACULTY & SUBJECTS -->
       <section class="panel" aria-label="Faculty and Curriculum Management">
         <div class="page-header">
-          <h2>Faculty &amp; Curriculum Management</h2>
-          <p>Manage faculty specializations, teaching load, academic subjects, and scheduling constraints. Changes are automatically saved.</p>
+          <h2><svg class="title-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Faculty &amp; Subjects</h2>
+          <span class="status-chip">Auto-saved</span>
         </div>
 
         <h3 class="section-heading">Faculty Management</h3>
@@ -444,33 +415,26 @@
       <!-- PANEL 4: SETTINGS -->
       <section class="panel" aria-label="Settings">
         <div class="page-header">
-          <h2>Settings</h2>
-          <p>Room management, class sizes, professor preferences, and system configuration.</p>
+          <h2><svg class="title-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</h2>
         </div>
 
         <!-- ── SYSTEM SETTINGS ── -->
-        <h3 class="section-heading">System Settings</h3>
+        <h3 class="section-heading">System Settings<span class="info-tip" tabindex="0" role="note" aria-label="Applies on the next optimization run" data-tip="Applies on the next optimization run">i</span></h3>
         <div class="academic-mode-card" id="engineSettingsCard">
-          <div class="academic-mode-header-sub" style="margin-bottom:16px;font-size:0.85rem;color:var(--text-secondary);">
-            Core engine parameters. Changes apply on the next optimization run.
-          </div>
           <div class="engine-settings-row">
             <div class="engine-settings-col">
               <div class="engine-settings-section-label">CP-SAT &amp; Engine</div>
               <div class="modal-form-group">
-                <label for="sysMaxUnits">Standard Max Units</label>
+                <label for="sysMaxUnits">Standard Max Units<span class="info-tip" tabindex="0" role="note" aria-label="Used for chart colors and overload warnings." data-tip="Used for chart colors and overload warnings.">i</span></label>
                 <input type="number" id="sysMaxUnits" min="1" max="60" value="24" placeholder="24">
-                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Used for chart colors and overload warnings.</p>
               </div>
               <div class="modal-form-group">
-                <label for="sysUnitsPerAssignment">Units Per Assignment</label>
+                <label for="sysUnitsPerAssignment">Units Per Assignment<span class="info-tip" tabindex="0" role="note" aria-label="How many units each scheduled slot counts as." data-tip="How many units each scheduled slot counts as.">i</span></label>
                 <input type="number" id="sysUnitsPerAssignment" min="1" max="6" value="2" placeholder="2">
-                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">How many units each scheduled slot counts as.</p>
               </div>
               <div class="modal-form-group">
-                <label for="sysCpSatTimeLimit">CP-SAT Time Limit (seconds)</label>
+                <label for="sysCpSatTimeLimit">CP-SAT Time Limit (seconds)<span class="info-tip" tabindex="0" role="note" aria-label="Max solver time before falling back to backtracking." data-tip="Max solver time before falling back to backtracking.">i</span></label>
                 <input type="number" id="sysCpSatTimeLimit" min="5" max="600" step="5" value="60" placeholder="60">
-                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Max solver time before falling back to backtracking.</p>
               </div>
             </div>
             <div class="engine-settings-divider"></div>
@@ -510,8 +474,7 @@
         <div class="academic-mode-card" id="academicModeCard">
           <div class="academic-mode-header">
             <div>
-              <div class="academic-mode-header-title">Active Academic Period</div>
-              <div class="academic-mode-header-sub">Controls which subjects are included in optimization, scheduling, reports, and all computations.</div>
+              <div class="academic-mode-header-title">Active Academic Period<span class="info-tip" tabindex="0" role="note" aria-label="Controls which subjects are scheduled, evaluated and exported" data-tip="Controls which subjects are scheduled, evaluated and exported">i</span></div>
             </div>
           </div>
           <div id="academicModeActiveBanner" class="academic-active-banner hidden">
@@ -521,7 +484,7 @@
           <div class="academic-mode-form-row">
             <div class="modal-form-group" style="margin:0;flex:1;min-width:160px;">
               <label for="academicYear">Academic Year</label>
-              <input type="text" id="academicYear" placeholder="e.g. 2024–2025">
+              <input type="text" id="academicYear" placeholder="e.g. 2024-2025">
             </div>
             <div class="modal-form-group" style="margin:0;flex:1;min-width:160px;">
               <label for="academicSemester">Semester</label>
@@ -537,15 +500,15 @@
             </div>
           </div>
           <div class="academic-mode-warning">
-            Only subjects tagged for the active semester will be scheduled, evaluated, and exported. Cross-semester subjects are excluded from all computations.
+            Subjects from other semesters are excluded.
           </div>
         </div>
 
         <!-- ── ROOM MANAGEMENT ── -->
         <h3 class="section-heading">Room Management</h3>
         <div class="room-capacity-legend">
-          <span class="room-cap-legend-item"><span class="room-cap-dot dot-rec"></span>Recommended cap = soft target for optimal class fit</span>
-          <span class="room-cap-legend-item"><span class="room-cap-dot dot-max"></span>Max cap = hard limit; assignments exceeding this are rejected</span>
+          <span class="room-cap-legend-item"><span class="room-cap-dot dot-rec"></span>Recommended</span>
+          <span class="room-cap-legend-item"><span class="room-cap-dot dot-max"></span>Max (hard limit)</span>
         </div>
         <div class="rooms-grid">
           <div class="room-section-card">
@@ -607,10 +570,8 @@
         <div class="section-divider"></div>
 
         <!-- ── SOFT CONSTRAINTS (PROFESSOR PREFERENCES) ── -->
-        <h3 class="section-heading">Professor Preferences</h3>
-        <p style="margin-bottom:16px;font-size:0.875rem;color:var(--text-secondary);">Set soft scheduling constraints for faculty. These influence optimization scoring without hard-blocking assignments.</p>
-
-        <div class="soft-constraint-select-row">
+        <h3 class="section-heading">Professor Preferences<span class="info-tip" tabindex="0" role="note" aria-label="Soft rules: they affect scoring but never block an assignment" data-tip="Soft rules: they affect scoring but never block an assignment">i</span></h3>
+                <div class="soft-constraint-select-row">
           <label for="scFacultySelect" style="font-size:0.8125rem;font-weight:600;color:var(--text-primary);white-space:nowrap;">Faculty Member</label>
           <select id="scFacultySelect" style="max-width:280px;"></select>
           <button class="btn btn-secondary" id="scLoadBtn" style="padding:0.4rem 0.875rem;font-size:0.8rem;">Load Preferences</button>
@@ -622,8 +583,8 @@
               <label for="scPreferredPeriod">Preferred Teaching Period</label>
               <select id="scPreferredPeriod">
                 <option value="">- No Preference -</option>
-                <option value="morning">Morning (7 AM – 12 PM)</option>
-                <option value="afternoon">Afternoon (12 PM – 5 PM)</option>
+                <option value="morning">Morning (7 AM - 12 PM)</option>
+                <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
                 <option value="evening">Evening (5 PM onwards)</option>
               </select>
             </div>
@@ -715,11 +676,11 @@
             <input type="number" id="editMaxUnits" min="0" max="50" placeholder="e.g. 30">
             <span class="modal-input-suffix">units</span>
           </div>
-          <p class="modal-hint">Hard cap for GA assignment. Standard max is 24 units; overload limit is 30 units - <em>per CHED guidelines (CMO No. 40, s. 2006)</em>.</p>
+          <p class="modal-hint">Standard 24 · overload up to 30<span class="info-tip" tabindex="0" role="note" aria-label="Per CHED CMO No. 40, s. 2006" data-tip="Per CHED CMO No. 40, s. 2006">i</span></p>
         </div>
         <div class="modal-info-strip">
           <span class="modal-info-dot"></span>
-          Changes apply to the next optimization run.
+          Applies on next run
         </div>
       </div>
       <div class="modal-footer">
@@ -729,18 +690,23 @@
     </div>
   </div>
 
+  <nav class="bottom-nav" aria-label="Primary">
+    <button type="button" class="bn-item" data-go="0"><svg class="bn-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Home</span></button>
+    <button type="button" class="bn-item" data-go="1"><svg class="bn-ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Optimize</span></button>
+    <button type="button" class="bn-item" data-go="2"><svg class="bn-ic" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Reports</span></button>
+    <button type="button" class="bn-item" data-go="3"><svg class="bn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Faculty</span></button>
+    <button type="button" class="bn-item" data-go="4"><svg class="bn-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></button>
+  </nav>
+
   <!-- Toast notification -->
   <div id="toastNotif" class="toast-notif" aria-live="polite"></div>
 
 <script>
 (function(){
-  var DEPT_SHORT={IT:'IT Dept',CS:'CS Dept',MB:'Marine Bio',ES:'Env. Science',MedB:'Med Biology'};
   var DEPT_FULL={IT:'Information Technology',CS:'Computer Science',MB:'Marine Biology',ES:'Environmental Science',MedB:'Medical Biology'};
 
-  /* department shown in the drawer and the dashboard banner */
-  var user=sessionStorage.getItem('atlasUser'),dept=sessionStorage.getItem('atlasDept');
-  var label=document.getElementById('drawerUserLabel');
-  if(label&&user)label.textContent=user+(dept?' \u00b7 '+(DEPT_SHORT[dept]||dept):'');
+  /* department shown in the dashboard banner */
+  var dept=sessionStorage.getItem('atlasDept');
   var banner=document.getElementById('deptBanner'),bannerName=document.getElementById('deptBannerName');
   if(dept&&banner&&bannerName){bannerName.textContent=(DEPT_FULL[dept]||dept)+' Department';banner.style.display='';}
 

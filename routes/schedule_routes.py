@@ -26,7 +26,7 @@ def _err(msg: str, code: int = 400):
     return jsonify({"success": False, "error": msg, "data": {}, "metrics": {}, "warnings": []}), code
 
 
-# ── /rooms — persist runtime room capacity ────────────────────────────────────
+# ── /rooms - persist runtime room capacity ────────────────────────────────────
 
 @schedule_bp.route("/rooms", methods=["POST"])
 def update_rooms():

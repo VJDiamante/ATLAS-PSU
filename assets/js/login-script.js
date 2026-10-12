@@ -45,7 +45,6 @@
     add('', 'Select your name', { disabled: true, selected: true });
     names.forEach(name => add(name, name));
     add(OTHER, 'My name is not listed');
-    $('facultyHint').hidden = names.length > 0;
     if (!names.length) {
       facultySelect.value = OTHER;
       $('facultyManual').hidden = false;

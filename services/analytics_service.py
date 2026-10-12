@@ -1,7 +1,7 @@
 """
 ATLAS PSU - services/analytics_service.py
 Faculty Workload Analytics - Phase 3.
-Pure computation — no Flask dependencies.
+Pure computation - no Flask dependencies.
 """
 
 import config.settings as _cfg_ana

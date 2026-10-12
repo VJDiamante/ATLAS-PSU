@@ -185,7 +185,7 @@ def _mutate_room(assignments: list, soft_constraints: dict,
     """
     Reassign room for a single assignment, respecting:
       - Room type compatibility (LAB → lab rooms only)
-      - Capacity hard max (fall back to best available for labs — batch-split)
+      - Capacity hard max (fall back to best available for labs - batch-split)
       - Room-slot conflicts
       - Per-day building affinity (faculty and section)
       - Explicit faculty room/building preferences
@@ -271,7 +271,7 @@ def _mutate_room(assignments: list, soft_constraints: dict,
 def _crossover(parent_a: list, parent_b: list, faculty_list: list, static_lookup: dict,
                 class_sizes: dict, rate: float) -> list:
     """
-    Uniform crossover between two valid schedules (slot/room only — faculty
+    Uniform crossover between two valid schedules (slot/room only - faculty
     and subject per index are identical across the population by design).
     The result is validated against all hard constraints; if invalid,
     falls back to parent_a unchanged.

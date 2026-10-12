@@ -7,7 +7,7 @@ All schedule generation must satisfy every constraint in this module.
 from config.settings import SPECIALIZATION_MAP, ROOM_CAPACITY
 import config.settings as _settings
 
-# Runtime room capacity — overrides ROOM_CAPACITY when set via set_runtime_room_capacity()
+# Runtime room capacity - overrides ROOM_CAPACITY when set via set_runtime_room_capacity()
 _runtime_room_capacity: dict = {}
 
 def set_runtime_room_capacity(capacity: dict) -> None:
@@ -29,7 +29,7 @@ def faculty_qualifies(faculty: dict, subject_name: str, static_lookup: dict) -> 
     if "Elective" in required and not any(
         s for s in required if s != "Elective"
     ):
-        return True  # open assignment — any faculty qualifies
+        return True  # open assignment - any faculty qualifies
     if "Elective" in required:
         fac_specs = faculty.get("specialization", [])
         primary = [s for s in required if s != "Elective"]
@@ -110,7 +110,7 @@ def room_capacity_penalty(room_name: str, student_count: int) -> float:
     recommended = cap.get("recommended", 9999)
 
     if student_count <= recommended:
-        return 0.0  # No penalty — fits comfortably
+        return 0.0  # No penalty - fits comfortably
 
     tiers = cap.get("tiers")
     if tiers:
@@ -176,7 +176,7 @@ def get_building(room_name: str) -> str:
     if r.startswith("CL"):       return "CL"
     if r.startswith("MTC"):      return "MTC"
     if r.startswith("NIT"):      return "NIT"
-    return r  # fallback — handles future rooms gracefully
+    return r  # fallback - handles future rooms gracefully
 
 
 # ── Schedule Validator ────────────────────────────────────────────────────────

@@ -1,20 +1,16 @@
 /* ============================================================
    ATLAS PSU - shared UI behaviour (chairperson + faculty pages)
-   - slide-in navigation drawer
+   - bottom tab bar (mobile navigation)
    - draggable scroll handle (touch devices)
    - zoomable schedule viewer
    ============================================================ */
 (function () {
   'use strict';
 
-  /* ---------- Navigation drawer ---------- */
-  function initDrawer() {
-    const button  = document.getElementById('navHamburger');
-    const drawer  = document.getElementById('navDrawer');
-    const overlay = document.getElementById('navDrawerOverlay');
-    if (!button || !drawer || !overlay) return;
-
-    const items = drawer.querySelectorAll('[data-go]');
+  /* ---------- Bottom tab bar (mobile) ---------- */
+  function initBottomNav() {
+    const items = document.querySelectorAll('.bn-item[data-go]');
+    if (!items.length) return;
 
     function syncActive() {
       const panels = Array.from(document.querySelectorAll('.panel'));
@@ -22,27 +18,12 @@
       items.forEach(item => item.classList.toggle('active', Number(item.dataset.go) === index));
     }
 
-    function setOpen(open) {
-      drawer.classList.toggle('open', open);
-      overlay.classList.toggle('open', open);
-      button.classList.toggle('open', open);
-      button.setAttribute('aria-expanded', open);
-      button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      drawer.setAttribute('aria-hidden', !open);
-      if (open) syncActive();
-    }
-
-    button.addEventListener('click', () => setOpen(!drawer.classList.contains('open')));
-    overlay.addEventListener('click', () => setOpen(false));
     items.forEach(item => item.addEventListener('click', () => {
       window.switchPanel(Number(item.dataset.go));
-      setOpen(false);
       setTimeout(syncActive, 60);
     }));
     document.querySelectorAll('.nav-item[data-panel]').forEach(item =>
       item.addEventListener('click', () => setTimeout(syncActive, 60)));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
-    window.addEventListener('resize', () => { if (window.innerWidth > 900) setOpen(false); });
     syncActive();
   }
 
@@ -228,7 +209,7 @@
     body.addEventListener('touchend', e => { if (e.touches.length < 2) startDist = 0; });
   }
 
-  initDrawer();
+  initBottomNav();
   initScrollHandle();
   initViewer();
 })();
