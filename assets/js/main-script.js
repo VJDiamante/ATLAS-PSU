@@ -123,9 +123,9 @@ const INITIAL_FACULTY = [
   { name: 'Andrea Reyes',  specialization: ['Systems'],                max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
   { name: 'Paolo Mendoza',  specialization: ['Programming'],            max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
   { name: 'Camille Bautista',  specialization: ['Mathematics'],            max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
-  { name: 'Joshua NavarroProf E',  specialization: ['Networks & Security'],    max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
+  { name: 'Joshua Navarro',  specialization: ['Networks & Security'],    max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
   { name: 'Bianca Flores',  specialization: ['Web & App Dev'],          max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
-  { name: 'Carlo VillanuevaProf G',  specialization: ['Systems'],                max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
+  { name: 'Carlo Villanueva',  specialization: ['Systems'],                max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
   { name: 'Alyssa Garcia',  specialization: ['Data Management'],        max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
   { name: 'Nathaniel Cruz',  specialization: ['Applied Computing'],      max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] },
   { name: 'Patricia Aquino',  specialization: ['Data Management'],        max_units: 24, absolute_max_units: 30, availability: ['Mon','Tue','Wed','Thu'] }
