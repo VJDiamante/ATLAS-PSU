@@ -150,5 +150,5 @@ GA_WEIGHTS = {
 }
 
 # ── Solver Config ─────────────────────────────────────────────────────────────
-CP_SAT_TIME_LIMIT_SECONDS = 60.0
+CP_SAT_TIME_LIMIT_SECONDS = 8.0
 UNITS_PER_ASSIGNMENT = 2
