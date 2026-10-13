@@ -665,27 +665,30 @@ function updateReportsPanel(data) {
     });
 
     const rowsHTML = sorted.map(item => {
-      const day         = (item.slot || '').split(':')[0].trim();
       const displaySlot = item.slot_display || item.slot || '';
-      const ctClass     = (item.class_type || 'LECTURE').toLowerCase();
-      const sectionTag  = item.section
+      const [slotDay, ...slotRest] = displaySlot.split(':');
+      const slotTime = slotRest.join(':').trim();
+      const ctClass  = (item.class_type || 'LECTURE').toLowerCase();
+      const sectionTag = item.section
         ? `<span class="section-badge">${escapeHTML(item.section)}</span>`
         : (item.year ? `<span class="subject-year-badge">${escapeHTML(item.year.replace(' Year','Y'))}</span>` : '');
-      const stuTag  = item.student_count > 0 ? `<span class="student-count-tag">${item.student_count}</span>` : '';
-      const capBadge = buildCapacityBadge(item);
+      const students = item.student_count > 0 ? `<span class="summary-students">${item.student_count} students</span>` : '';
 
       return `
         <tr>
-          <td><div class="summary-subj-name">${escapeHTML(item.subject)}</div></td>
           <td>
-            <span class="class-type-tag ${ctClass}">${escapeHTML(item.class_type || 'LECTURE')}</span>
-            ${sectionTag}
+            <div class="summary-subj-name">${escapeHTML(item.subject)}</div>
+            <div class="summary-subj-meta">
+              <span class="class-type-tag ${ctClass}">${escapeHTML(item.class_type || 'LECTURE')}</span>
+              ${sectionTag}
+            </div>
           </td>
-          <td>${displaySlot ? `<span class="slot-badge slot-${escapeHTML(day)}">${escapeHTML(displaySlot)}</span>` : '<span class="text-muted">-</span>'}</td>
           <td>
-            ${item.room ? `<span class="room-badge">${escapeHTML(item.room)}</span>` : '<span class="text-muted">-</span>'}
-            ${stuTag}
-            ${capBadge}
+            ${displaySlot ? `<div class="summary-slot-day">${escapeHTML(slotDay.trim())}</div><div class="summary-slot-time">${escapeHTML(slotTime)}</div>` : '<span class="text-muted">-</span>'}
+          </td>
+          <td>
+            <div class="summary-room">${item.room ? escapeHTML(item.room) : '<span class="text-muted">-</span>'}</div>
+            <div class="summary-room-meta">${students}${buildCapacityBadge(item)}</div>
           </td>
         </tr>`;
     }).join('');
@@ -709,14 +712,12 @@ function updateReportsPanel(data) {
       <table class="summary-assignments-table">
         <colgroup>
           <col class="col-subject">
-          <col class="col-type">
           <col class="col-schedule">
           <col class="col-room">
         </colgroup>
         <thead>
           <tr>
             <th>Subject</th>
-            <th>Type</th>
             <th>Schedule</th>
             <th>Room</th>
           </tr>
@@ -1371,10 +1372,16 @@ function initEditFacultyModal() {
     const row = document.createElement('div');
     row.className = 'modal-assign-row';
     row.innerHTML = `
-      <select class="edit-assign-subject">${buildSubjectOptions(item.subject || '')}</select>
-      <select class="edit-assign-slot">${buildSlotOptions(item.slot || '')}</select>
-      <select class="edit-assign-room">${buildRoomOptions(item.room || '')}</select>
-      <button type="button" class="modal-assign-delete" title="Remove">&times;</button>
+      <label class="modal-assign-field modal-assign-subject"><span>Subject</span>
+        <select class="edit-assign-subject">${buildSubjectOptions(item.subject || '')}</select>
+      </label>
+      <label class="modal-assign-field"><span>Day and time</span>
+        <select class="edit-assign-slot">${buildSlotOptions(item.slot || '')}</select>
+      </label>
+      <label class="modal-assign-field"><span>Room</span>
+        <select class="edit-assign-room">${buildRoomOptions(item.room || '')}</select>
+      </label>
+      <button type="button" class="modal-assign-delete" title="Remove" aria-label="Remove assignment">&times;</button>
     `;
     row.querySelector('.modal-assign-delete').addEventListener('click', () => row.remove());
     list.appendChild(row);
@@ -1866,20 +1873,20 @@ function generatePrintReport() {
   const upa = getUnitsPerAssignment();
   const facMaxMap = getFacultyMaxUnitsMap();
 
-  const facultyRows = Object.keys(byFaculty).sort().map(facName => {
+  const facultyRows = Object.keys(byFaculty).sort().map((facName, i) => {
     const items = byFaculty[facName];
     const units = items.length * upa;
     const fmax  = facMaxMap[facName] || MAX_UNITS;
-    const subjectsList = Array.from(new Set(items.map(i => i.subject))).join(', ');
-    const loadStatus = units > fmax ? 'OVERLOAD' : units === fmax ? 'MAX LOAD' : 'NORMAL';
+    const subjectsList = Array.from(new Set(items.map(it => it.subject))).join(', ');
+    const loadStatus = units > fmax ? 'Overload' : units === fmax ? 'Max load' : 'Normal';
     return `
       <tr>
+        <td class="num">${i + 1}</td>
         <td><strong>${escapeHTML(facName)}</strong></td>
-        <td class="txt-center font-mono">${units} u</td>
-        <td><span class="print-status-tag ${loadStatus.toLowerCase().replace(' ', '')}">${loadStatus}</span></td>
+        <td class="txt-center">${units}</td>
+        <td class="${units > fmax ? 'status-overload' : ''}">${loadStatus}</td>
         <td>${escapeHTML(subjectsList)}</td>
-      </tr>
-    `;
+      </tr>`;
   }).join('');
 
   const scheduleRows = [...reportData].sort((a, b) => {
@@ -1888,16 +1895,15 @@ function generatePrintReport() {
       return (DAY_ORDER[d.trim()] * 100) + parseInt(t || '0');
     };
     return ps(a.slot) - ps(b.slot);
-  }).map(item => `
+  }).map((item, i) => `
     <tr>
-      <td class="font-mono"><strong>${escapeHTML(item.slot_display || item.slot)}</strong></td>
-      <td>${escapeHTML(item.subject)}</td>
-      <td><span class="type-tag ${item.type.toLowerCase()}">${escapeHTML(item.type)}</span></td>
-      <td><strong>${escapeHTML(item.faculty)}</strong></td>
-      <td><span class="room-cell">${escapeHTML(item.room || 'N/A')}</span></td>
-      <td><span class="print-class-tag ${(item.class_type||'LECTURE').toLowerCase()}">${escapeHTML(item.class_type || 'LECTURE')}</span></td>
-    </tr>
-  `).join('');
+      <td class="num">${i + 1}</td>
+      <td>${escapeHTML(item.slot_display || item.slot)}</td>
+      <td>${escapeHTML(item.subject)}<div class="sub-type">${escapeHTML(item.type)}</div></td>
+      <td>${escapeHTML(item.faculty)}</td>
+      <td>${escapeHTML(item.room || 'N/A')}</td>
+      <td>${(item.class_type || 'LECTURE') === 'LAB' ? 'Laboratory' : 'Lecture'}</td>
+    </tr>`).join('');
 
   // Extract analytics stats directly safely
   const fScore  = document.getElementById('fairnessScore').textContent;
@@ -1910,327 +1916,147 @@ function generatePrintReport() {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ATLAS PSU - Teaching Load Optimization Report</title>
+  <title>Teaching Load Assignment Report - ${escapeHTML(deptFull)} Department</title>
   <style>
+    @page { size: A4 portrait; margin: 25mm 20mm 25mm 25mm; }
+    @page { @bottom-left { content: "ATLAS PSU"; font: 8.5pt 'Times New Roman', serif; color: #555; }
+            @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8.5pt 'Times New Roman', serif; color: #555; } }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 10.5pt;
-      color: #000;
-      background: #fff;
-      line-height: 1.5;
-    }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.45; color: #111; background: #fff; }
+    strong { font-weight: 700; }
 
-    /* ── COVER PAGE ── */
-    .cover {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 60px 48px;
-      background: #fff;
-      color: #000;
-      page-break-after: always;
-      border-bottom: 3px solid #000;
-    }
-    .cover-logo {
-      width: 72px;
-      height: 72px;
-      background: #000;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
-      font-size: 24pt;
-      font-weight: bold;
-      color: #fff;
-    }
-    .cover h1 {
-      font-size: 26pt;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 12px;
-      color: #000;
-    }
-    .cover .subtitle {
-      font-size: 13pt;
-      margin-bottom: 48px;
-      font-weight: 400;
-      color: #333;
-    }
-    .cover-meta {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-      max-width: 500px;
-      width: 100%;
-      text-align: left;
-      border: 2px solid #000;
-      padding: 24px;
-      border-radius: 8px;
-    }
-    .cover-meta-item { display: flex; flex-direction: column; }
-    .cover-meta-label {
-      font-size: 8pt;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #666;
-      margin-bottom: 4px;
-    }
-    .cover-meta-value { font-size: 11pt; font-weight: 700; color: #000; }
+    .letterhead { text-align: center; padding-bottom: 5mm; border-bottom: 1.5pt solid #111; }
+    .letterhead .rp   { font-size: 9pt; letter-spacing: 0.06em; text-transform: uppercase; }
+    .letterhead .univ { margin-top: 1.5mm; font-size: 15pt; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
+    .letterhead .unit { margin-top: 1mm; font-size: 11pt; }
+    .letterhead .addr { margin-top: 0.5mm; font-size: 9.5pt; color: #444; }
 
-    /* ── PAGES ── */
-    .page {
-      padding: 50px 60px;
-      page-break-after: always;
-    }
-    .page:last-child { page-break-after: avoid; }
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-bottom: 2px solid #000;
-      padding-bottom: 12px;
-      margin-bottom: 30px;
-    }
-    .page-header h2 {
-      font-size: 13pt;
-      font-weight: 700;
-      color: #000;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-    .page-header .page-meta { font-size: 9pt; color: #555; }
-    h3 { font-size: 11pt; color: #000; margin-bottom: 16px; font-weight: 700; }
+    .cover { page-break-after: always; min-height: 245mm; }
+    .doc-title { margin: 30mm 0 14mm; text-align: center; }
+    .doc-title h1 { font-size: 20pt; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1.25; }
+    .doc-title p  { margin-top: 4mm; font-size: 12pt; }
+    .meta-table { width: 100%; max-width: 135mm; margin: 0 auto; border-collapse: collapse; }
+    .meta-table td { padding: 2.5mm 3mm; border-bottom: 0.5pt solid #bbb; font-size: 10.5pt; }
+    .meta-table td.k { width: 38%; font-weight: 700; }
+    .meta-table tr:first-child td { border-top: 1pt solid #111; }
+    .meta-table tr:last-child td { border-bottom: 1pt solid #111; }
 
-    /* ── ANALYTICS CARDS ── */
-    .fairness-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 32px;
-    }
-    .fairness-item {
-      border: 1.5px solid #000;
-      border-radius: 6px;
-      padding: 14px 16px;
-      background: #fff;
-    }
-    .fairness-item .f-label {
-      font-size: 7.5pt;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: #555;
-      font-weight: 600;
-    }
-    .fairness-item .f-value {
-      font-size: 20pt;
-      font-weight: 700;
-      margin: 4px 0 2px;
-      line-height: 1;
-      color: #000;
-    }
-    .fairness-item .f-sub { font-size: 7.5pt; color: #777; }
+    .section-title { margin-bottom: 5mm; padding-bottom: 1.5mm; border-bottom: 1pt solid #111; font-size: 12pt; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
+    .subhead { margin: 7mm 0 3mm; font-size: 11pt; font-weight: 700; }
+    .section { page-break-after: always; }
+    .section:last-of-type { page-break-after: auto; }
 
-    /* ── TABLES ── */
-    .report-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 9.5pt;
-      margin-bottom: 24px;
-    }
-    .report-table thead tr { background: #000; color: #fff; }
-    .report-table th {
-      padding: 9px 12px;
-      font-weight: 700;
-      text-align: left;
-      font-size: 8.5pt;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-    .report-table td {
-      padding: 9px 12px;
-      border-bottom: 1px solid #ccc;
-      color: #000;
-    }
-    .report-table tr:nth-child(even) { background: #f5f5f5; }
+    .metrics { width: 100%; margin-bottom: 4mm; border-collapse: collapse; border-top: 1.2pt solid #111; border-bottom: 1.2pt solid #111; }
+    .metrics td { width: 25%; padding: 3.5mm 2mm; text-align: center; border-left: 0.5pt solid #bbb; }
+    .metrics td:first-child { border-left: 0; }
+    .metrics .v { font-size: 16pt; font-weight: 700; line-height: 1.1; }
+    .metrics .l { margin-top: 1mm; font-size: 8pt; letter-spacing: 0.05em; text-transform: uppercase; color: #444; }
+
+    .report-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+    .report-table thead { display: table-header-group; }
+    .report-table th { padding: 2mm; text-align: left; font-size: 8.5pt; letter-spacing: 0.04em; text-transform: uppercase; border-top: 1.2pt solid #111; border-bottom: 1pt solid #111; }
+    .report-table td { padding: 2mm; vertical-align: top; border-bottom: 0.5pt solid #ccc; }
+    .report-table tbody tr:last-child td { border-bottom: 1pt solid #111; }
+    .report-table tr { page-break-inside: avoid; }
+    .report-table .num { width: 9mm; color: #555; }
     .txt-center { text-align: center !important; }
-    .font-mono { font-family: Consolas, 'Courier New', monospace; }
+    .sub-type { font-size: 8.5pt; font-style: italic; color: #555; }
+    .status-overload { font-weight: 700; }
+    .note { margin-top: 4mm; font-size: 9pt; font-style: italic; color: #444; }
 
-    /* ── TAGS (all B&W) ── */
-    .print-status-tag {
-      display: inline-block;
-      padding: 2px 8px;
-      border: 1.5px solid #000;
-      border-radius: 3px;
-      font-size: 7.5pt;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #000;
-      background: #fff;
-    }
-    .print-class-tag {
-      display: inline-block;
-      padding: 2px 6px;
-      border: 1px solid #555;
-      border-radius: 3px;
-      font-size: 7.5pt;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #000;
-      background: #fff;
-    }
-    .room-cell {
-      font-family: Consolas, 'Courier New', monospace;
-      font-size: 8.5pt;
-      font-weight: 700;
-      color: #000;
-    }
-    .type-tag {
-      display: inline-block;
-      padding: 2px 6px;
-      border: 1px solid #555;
-      border-radius: 3px;
-      font-size: 7.5pt;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: #000;
-      background: #fff;
-    }
-
-    /* ── SIGNATURE ── */
-    .sign-zone {
-      margin-top: 60px;
-      display: flex;
-      justify-content: space-between;
-      page-break-inside: avoid;
-    }
-    .sign-block { width: 240px; text-align: center; }
-    .sign-line { border-top: 1.5px solid #000; margin-top: 45px; margin-bottom: 6px; }
-    .sign-title { font-size: 9pt; color: #555; }
-
-    @media print {
-      body { background: #fff; color: #000; }
-      .cover { min-height: 100vh; }
-    }
+    .sign-zone { display: flex; justify-content: space-between; margin-top: 22mm; page-break-inside: avoid; }
+    .sign-block { width: 68mm; text-align: center; }
+    .sign-label { margin-bottom: 14mm; font-size: 9.5pt; text-align: left; color: #444; }
+    .sign-line { padding-top: 1.5mm; border-top: 0.75pt solid #111; }
+    .sign-title { font-size: 9.5pt; color: #444; }
   </style>
 </head>
 <body>
 
-  <div class="cover">
-    <div class="cover-logo">A</div>
-    <h1>Teaching Load Assignment<br>Optimization Analysis Report</h1>
-    <p class="subtitle">Palawan State University, ${escapeHTML(deptFull)} Department</p>
-    
-    <div class="cover-meta">
-      <div class="cover-meta-item">
-        <span class="cover-meta-label">Generated</span>
-        <span class="cover-meta-value">${dateStr}</span>
-      </div>
-      <div class="cover-meta-item">
-        <span class="cover-meta-label">Time</span>
-        <span class="cover-meta-value">${timeStr}</span>
-      </div>
-      <div class="cover-meta-item">
-        <span class="cover-meta-label">Prepared by</span>
-        <span class="cover-meta-value">${escapeHTML(user)}</span>
-      </div>
-      <div class="cover-meta-item">
-        <span class="cover-meta-label">Faculty Count</span>
-        <span class="cover-meta-value">${Object.keys(byFaculty).length} members</span>
-      </div>
-      <div class="cover-meta-item" style="grid-column:1/-1;">
-        <span class="cover-meta-label">Academic Period</span>
-        <span class="cover-meta-value">${escapeHTML(semesterLabel)}</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="page-header">
-      <h2>I. Executive Distribution Analytics</h2>
-      <span class="page-meta">ATLAS PSU Engine · Page 2</span>
+  <section class="cover">
+    <div class="letterhead">
+      <div class="rp">Republic of the Philippines</div>
+      <div class="univ">Palawan State University</div>
+      <div class="unit">College of Sciences &middot; ${escapeHTML(deptFull)} Department</div>
+      <div class="addr">Puerto Princesa City, Palawan</div>
     </div>
 
-    <h3>Workload Balance Matrix</h3>
-    <div class="fairness-summary-grid">
-      <div class="fairness-item">
-        <div class="f-label">Overall Balance Score</div>
-        <div class="f-value">${fScore}</div>
-        <div class="f-sub">Combined GA targets</div>
-      </div>
-      <div class="fairness-item">
-        <div class="f-label">Jain's Index</div>
-        <div class="f-value">${fJain}</div>
-        <div class="f-sub">Equality metric (0-1)</div>
-      </div>
-      <div class="fairness-item">
-        <div class="f-label">Specialization Match</div>
-        <div class="f-value">${fMatch}</div>
-        <div class="f-sub">Domain placement</div>
-      </div>
-      <div class="fairness-item">
-        <div class="f-label">Load Std Deviation</div>
-        <div class="f-value">${fStdDev}</div>
-        <div class="f-sub">Spread index deviation</div>
-      </div>
+    <div class="doc-title">
+      <h1>Teaching Load<br>Assignment Report</h1>
+      <p>${escapeHTML(semesterLabel)}</p>
     </div>
 
-    <h3 style="margin-top: 20px;">Faculty Workload Status</h3>
+    <table class="meta-table">
+      <tr><td class="k">Department</td><td>${escapeHTML(deptFull)}</td></tr>
+      <tr><td class="k">Academic period</td><td>${escapeHTML(semesterLabel)}</td></tr>
+      <tr><td class="k">Faculty members</td><td>${Object.keys(byFaculty).length}</td></tr>
+      <tr><td class="k">Prepared by</td><td>${escapeHTML(user)}</td></tr>
+      <tr><td class="k">Date generated</td><td>${dateStr}, ${timeStr}</td></tr>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">I. Workload Distribution Summary</h2>
+
+    <div class="subhead">Workload Balance Indicators</div>
+    <table class="metrics">
+      <tr>
+        <td><div class="v">${fScore}</div><div class="l">Balance score</div></td>
+        <td><div class="v">${fJain}</div><div class="l">Jain's index</div></td>
+        <td><div class="v">${fMatch}</div><div class="l">Specialization match</div></td>
+        <td><div class="v">${fStdDev}</div><div class="l">Load std. deviation</div></td>
+      </tr>
+    </table>
+
+    <div class="subhead">Faculty Workload Status</div>
     <table class="report-table">
       <thead>
         <tr>
-          <th>Faculty Member</th>
-          <th class="txt-center" style="width: 100px;">Total Load</th>
-          <th style="width: 130px;">Status</th>
-          <th>Assigned Subjects</th>
+          <th class="num">No.</th>
+          <th>Faculty member</th>
+          <th class="txt-center" style="width: 20mm;">Units</th>
+          <th style="width: 22mm;">Status</th>
+          <th>Assigned subjects</th>
         </tr>
       </thead>
       <tbody>
         ${facultyRows}
       </tbody>
     </table>
+  </section>
 
-    <div class="sign-zone">
-      <div class="sign-block">
-        <div class="sign-line"></div>
-        <strong>${escapeHTML(user)}</strong><br>
-        <span class="sign-title">Department Chairperson</span>
-      </div>
-      <div class="sign-block">
-        <div class="sign-line"></div>
-        <strong>College Dean</strong><br>
-        <span class="sign-title">College Dean</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="page">
-    <div class="page-header">
-      <h2>II. Master Schedule Allocations</h2>
-      <span class="page-meta">ATLAS PSU Engine · Page 3</span>
-    </div>
+  <section class="section">
+    <h2 class="section-title">II. Master Schedule of Assignments</h2>
 
     <table class="report-table">
       <thead>
         <tr>
-          <th style="width: 160px;">Time Slot &amp; Day</th>
+          <th class="num">No.</th>
+          <th style="width: 34mm;">Day and time</th>
           <th>Subject</th>
-          <th style="width: 110px;">Type</th>
-          <th>Faculty</th>
-          <th style="width: 90px;">Room</th>
-          <th style="width: 70px;">Class</th>
+          <th style="width: 28mm;">Faculty</th>
+          <th style="width: 18mm;">Room</th>
+          <th style="width: 20mm;">Class</th>
         </tr>
       </thead>
       <tbody>
         ${scheduleRows}
       </tbody>
     </table>
-  </div>
+
+    <div class="sign-zone">
+      <div class="sign-block">
+        <div class="sign-label">Prepared by:</div>
+        <div class="sign-line"><strong>${escapeHTML(user)}</strong></div>
+        <div class="sign-title">Department Chairperson</div>
+      </div>
+      <div class="sign-block">
+        <div class="sign-label">Approved by:</div>
+        <div class="sign-line"><strong>&nbsp;</strong></div>
+        <div class="sign-title">College Dean</div>
+      </div>
+    </div>
+  </section>
 
   <script>
     window.onload = function() {

@@ -1286,9 +1286,8 @@ td {
 }
 
 .summary-assignments-table col.col-subject  { width: auto; }
-.summary-assignments-table col.col-type     { width: 140px; }
-.summary-assignments-table col.col-schedule { width: 220px; }
-.summary-assignments-table col.col-room     { width: 90px; }
+.summary-assignments-table col.col-schedule { width: 190px; }
+.summary-assignments-table col.col-room     { width: 230px; }
 
 .summary-assignments-table thead th {
   padding: 0.5rem 1rem;
@@ -1314,27 +1313,6 @@ td {
 .summary-assignments-table tbody tr:last-child td { border-bottom: none; }
 
 .summary-assignments-table tbody tr:hover { background: var(--bg-surface-2); }
-
-.summary-subj-name {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.85rem;
-}
-/* ============================================================
-   22. SLOT BADGES (day-colored pills)
-   ============================================================ */
-.slot-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.175rem 0.625rem;
-  border-radius: var(--radius-full);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  margin-left: var(--space-2);
-  white-space: nowrap;
-  vertical-align: middle;
-}
 
 /* ============================================================
    23. FACULTY TIMETABLE
@@ -1495,8 +1473,6 @@ td {
 
 .modal-body {
   padding: var(--space-5) var(--space-6);
-  overflow-y: auto;
-  flex: 1;
 }
 
 .modal-form-group {
@@ -1609,24 +1585,14 @@ td {
 .modal-assignment-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  max-height: 280px;
   overflow-y: auto;
-  padding-right: 2px;
 }
 
 .modal-assignment-list::-webkit-scrollbar { width: 4px; }
 .modal-assignment-list::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 4px; }
 
 .modal-assign-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
-  gap: var(--space-2);
   align-items: center;
-  background: var(--bg-surface-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-3);
 }
 
 .modal-assign-row select,
@@ -1650,11 +1616,8 @@ td {
 .modal-assign-delete {
   background: none;
   border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
   color: var(--text-muted);
   cursor: pointer;
-  width: 28px;
-  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2860,13 +2823,8 @@ body.page-login {
 /* Color dot indicating LECTURE vs LAB */
 .fac-assign-ct-dot {
   flex-shrink: 0;
-  width: 7px;
-  height: 7px;
   border-radius: 50%;
-  margin-top: 5px;
 }
-.ct-dot-lecture { background: var(--text-primary); }
-.ct-dot-lab     { background: var(--text-primary); }
 
 /* Subject name */
 .fac-assign-subject-name {
@@ -2891,16 +2849,6 @@ body.page-login {
 .fac-assign-section {
   font-size: 0.6rem !important;
   padding: 0.1rem 0.35rem !important;
-}
-.fac-assign-slot {
-  font-size: 0.67rem;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  white-space: nowrap;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 4px;
-  padding: 1px 5px;
 }
 .fac-assign-room {
   font-size: 0.67rem;
@@ -3450,7 +3398,6 @@ img, canvas { max-width: 100%; }
   .capacity-metrics-grid { grid-template-columns: 1fr 1fr; }
   .panel { padding: var(--space-4) var(--space-3) calc(var(--space-8) + env(safe-area-inset-bottom, 0px)); }
   .modal-card { margin: 0 var(--space-2); max-width: calc(100vw - 1rem); }
-  .modal-assign-row { grid-template-columns: 1fr; }
   .modal-assign-delete { justify-self: stretch; width: 100%; }
   .sc-form-grid, .sc-leave-section { grid-template-columns: 1fr; }
   #engineSettingsCard .engine-settings-row .engine-settings-col:first-child,
@@ -3498,7 +3445,7 @@ img, canvas { max-width: 100%; }
   .nav-brand-wrap img.psu-logo { width: 32px; height: 32px; }
 
   /* minimum readable text (>= 12px) for tiny labels/badges */
-  .section-badge, .class-type-tag, .student-count-tag, .viol-counts, .units-badge, .fac-assign-slot, .fac-assign-room, .fac-assign-count, .fac-assign-section, .tt-entry, .tt-faculty-tag, .tt-subject-tag, .tt-room-tag, .tt-class-tag, .tt-section-tag, .tt-time-label, .stat-label, .modal-label, .modal-section-label, .room-cap-col-labels, .capacity-metric-label, .fairness-card-label, .fairness-card-sub, .stat-sub, .summary-fac-count, .lp-brand-sub, .summary-assignments-table thead th, .curriculum-table thead th, .cap-details-table thead th, .subject-year-badge, .slot-badge, .capacity-overall-badge, .btn-select-day { font-size: 0.8rem !important; }
+  .section-badge, .class-type-tag, .student-count-tag, .viol-counts, .units-badge, .fac-assign-slot, .fac-assign-room, .fac-assign-count, .fac-assign-section, .tt-entry, .tt-faculty-tag, .tt-subject-tag, .tt-room-tag, .tt-class-tag, .tt-section-tag, .tt-time-label, .stat-label, .modal-label, .modal-section-label, .room-cap-col-labels, .capacity-metric-label, .fairness-card-label, .fairness-card-sub, .stat-sub, .summary-fac-count, .lp-brand-sub, .summary-assignments-table thead th, .curriculum-table thead th, .cap-details-table thead th, .subject-year-badge, .capacity-overall-badge, .btn-select-day { font-size: 0.8rem !important; }
   .fac-assign-subject-name, .summary-subj-name { font-size: 0.9rem; }
   .fac-assign-meta { gap: 6px; }
   .timetable-grid { font-size: 0.85rem; }
@@ -3726,11 +3673,9 @@ img, canvas { max-width: 100%; }
 .summary-assignments-table td[colspan] { grid-column: 1 / -1; text-align: center !important; }
 .summary-assignments-table td[colspan]::before { content: none; }
 .summary-assignments-table td:nth-child(1)::before { content: none; }
-.summary-assignments-table td:nth-child(2)::before { content: "Type / Section"; }
-.summary-assignments-table td:nth-child(3)::before { content: "Schedule"; }
-.summary-assignments-table td:nth-child(4)::before { content: "Room & capacity"; }
+.summary-assignments-table td:nth-child(2)::before { content: "Schedule"; }
+.summary-assignments-table td:nth-child(3)::before { content: "Room"; }
 .summary-assignments-table td:nth-child(1) { grid-column: 1 / -1; }
-.summary-assignments-table td:nth-child(4) { grid-column: 1 / -1; }
 .summary-assignments-table td input[type="text"], .summary-assignments-table td input[type="number"], .summary-assignments-table td select, .summary-assignments-table td .dropdown-btn, .summary-assignments-table td .multi-select-dropdown { width: 100%; max-width: none !important; }
 .summary-assignments-table td button.row-action-btn { width: 100%; min-height: 44px; }
 .summary-assignments-table tbody { padding: var(--space-3); }
@@ -4114,7 +4059,7 @@ button:active:not(:disabled), .btn:active { filter: brightness(0.94); }
   display: inline-flex; align-items: center; gap: 6px; padding: 0; background: none; border: 0;
   font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ok);
 }
-.class-type-tag::before, .tt-class-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.class-type-tag::before, .tt-class-tag::before { content: ""; border-radius: 50%; background: currentColor; }
 .class-type-tag.lab, .tt-class-tag.lab { color: var(--clr-primary-600); }
 
 /* neutral chips */
@@ -4125,7 +4070,7 @@ button:active:not(:disabled), .btn:active { filter: brightness(0.94); }
 }
 
 /* time slots: plain text, no per-day colors */
-.slot-badge, .fac-assign-slot {
+.fac-assign-slot {
   display: inline-block; padding: 0; background: none; border: 0; border-radius: 0;
   font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 500; color: var(--text-secondary);
   font-variant-numeric: tabular-nums; white-space: nowrap;
@@ -4174,4 +4119,40 @@ button:active:not(:disabled), .btn:active { filter: brightness(0.94); }
   .summary-assignments-table tbody tr { background: var(--card-bg); }
   .btn, .btn-login-submit { border-radius: 999px; }
   .page-header h2 { font-size: 1.5rem; }
+}
+
+/* ============================================================
+   SCHEDULE SUMMARY (reports) AND EDIT MODAL: roomier layout
+   ============================================================ */
+.summary-assignments-table td { padding: 16px 20px; vertical-align: middle; }
+.summary-assignments-table th { padding-left: 20px; padding-right: 20px; }
+.summary-subj-name { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+.summary-subj-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+.summary-slot-day { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+.summary-slot-time { margin-top: 2px; font-size: 0.8125rem; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.summary-room { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+.summary-room-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+.summary-students { font-size: 0.8125rem; color: var(--text-secondary); }
+
+/* muted type dots */
+.fac-assign-ct-dot { width: 6px; height: 6px; margin-top: 9px; background: var(--border-default); }
+.ct-dot-lecture { background: #a9c7c9; }
+.ct-dot-lab { background: #e0b9a6; }
+.class-type-tag::before, .tt-class-tag::before { width: 5px; height: 5px; opacity: 0.55; }
+
+/* edit-assignment modal */
+.modal-body { flex: 1; overflow-y: auto; }
+.modal-assignment-list { gap: var(--space-4); max-height: none; overflow: visible; padding-right: 0; }
+.modal-assign-row {
+  position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);
+  padding: var(--space-4) var(--space-5); background: var(--bg-surface-2); border: 0; border-radius: var(--radius-lg);
+}
+.modal-assign-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.modal-assign-field > span { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
+.modal-assign-subject { grid-column: 1 / -1; margin-right: 44px; }
+.modal-assign-row select { min-height: 44px; padding: 0.5rem 0.75rem; font-size: 0.9375rem; border-radius: var(--radius-md); }
+.modal-assign-delete { position: absolute; top: var(--space-3); right: var(--space-3); width: 36px; height: 36px; min-width: 0; min-height: 0; border-radius: 50%; }
+@media (max-width: 520px) {
+  .modal-assign-row { grid-template-columns: 1fr; padding: var(--space-4); }
+  .modal-assign-subject { grid-column: auto; }
 }
